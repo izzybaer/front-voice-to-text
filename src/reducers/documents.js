@@ -3,10 +3,10 @@ export default (state = initialState, {type, payload}) => {
   switch(type) {
   case 'DOCUMENT_CREATE':
     return payload
-  case 'DICTATION_UPDATE':
+  case 'DOCUMENT_UPDATE':
     return payload
-  case 'DICTATION_DELETE':
-    return initialState
+  case 'DOCUMENT_DELETE':
+    return state
   case 'DOCUMENT_FETCH':
     return payload
   case 'DOCUMENT_RESET':
