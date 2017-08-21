@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux'
 
-import documents from './documents.js'
+import document from './documents.js'
 
-export default combineReducers({documents})
+export default combineReducers({document})
