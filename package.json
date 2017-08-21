@@ -50,6 +50,7 @@
     "resolve-url-loader": "^2.1.0",
     "sass-loader": "^6.0.6",
     "socket.io-client": "^2.0.3",
+    "superagent": "^3.6.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
     "validator": "^8.0.0",
