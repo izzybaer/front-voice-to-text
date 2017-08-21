@@ -1,10 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 
 import * as util from '../../lib/util.js'
 
-export class HeaderContainer extends React.Component {
+export class DocumentLandingContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -12,10 +11,9 @@ export class HeaderContainer extends React.Component {
 
   render() {
     return (
-      <header>
-        <h1>Voice To Text</h1>
-        <Link to='/'>Home</Link>
-      </header>
+      <div className='document-landing-container'>
+
+      </div>
     )
   }
 }
@@ -28,4 +26,4 @@ const mapDispatchToProps = dispatch => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentLandingContainer)
