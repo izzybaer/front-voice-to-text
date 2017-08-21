@@ -1,5 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
+
 import * as util from '../../lib/util.js'
 
 export class HeaderContainer extends React.Component {
@@ -12,6 +14,7 @@ export class HeaderContainer extends React.Component {
     return (
       <header>
         <h1>Voice To Text</h1>
+        <Link to='/'>Home</Link>
       </header>
     )
   }

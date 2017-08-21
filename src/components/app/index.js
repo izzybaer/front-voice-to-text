@@ -17,9 +17,9 @@ export class App extends React.Component {
   render() {
     return (
       <div className='app'>
-        <HeaderContainer />
         <BrowserRouter>
           <main>
+            <HeaderContainer />
             <Route exact path='/' component={DocumentLandingContainer} />
             <Route exact path='/document/*' component={DocumentActiveContainer} />
           </main>
