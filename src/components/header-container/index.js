@@ -1,11 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {BrowserRouter, Link, Route} from 'react-router-dom'
 import * as util from '../../lib/util.js'
 
-import HeaderContainer from '../header-container'
-
-export class App extends React.Component {
+export class HeaderContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -13,9 +10,9 @@ export class App extends React.Component {
 
   render() {
     return (
-      <div className='app'>
-        <HeaderContainer />
-      </div>
+      <header>
+        <h1>Voice To Text</h1>
+      </header>
     )
   }
 }
@@ -28,4 +25,4 @@ const mapDispatchToProps = dispatch => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)
