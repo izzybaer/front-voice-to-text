@@ -15,9 +15,14 @@ export const documentDelete = () => ({
   type: 'DOCUMENT_DELETE',
 })
 
-export const documentFetch = document => ({
-  type: 'DOCUMENT_FETCH',
+export const documentFetchOne = document => ({
+  type: 'DOCUMENT_FETCH_ONE',
   payload: document,
+})
+
+export const documentFetchAll = documents => ({
+  type: 'DOCUMENT_FETCH_ALL',
+  payload: documents,
 })
 
 export const documentReset = () => ({
@@ -25,7 +30,7 @@ export const documentReset = () => ({
 })
 
 export const documentCreateRequest = document => dispatch =>
-  superagent.post(`${__API_URL__}/documents`)
+  superagent.post(`${__API_URL__}/document`)
     .send(document)
     .then(res => {
       util.log('documentCreateRequest', res.body)
@@ -35,7 +40,7 @@ export const documentCreateRequest = document => dispatch =>
     .catch(err => util.logError('documentCreateRequest', err))
 
 export const documentUpdateRequest = document => dispatch =>
-  superagent.put(`${__API_URL__}/documents/${document._id}`)
+  superagent.put(`${__API_URL__}/document/${document._id}`)
     .send(document)
     .then(res => {
       util.log('documentUpdateRequest', res.body)
@@ -45,7 +50,7 @@ export const documentUpdateRequest = document => dispatch =>
     .catch(err => util.logError('documentUpdateRequest', err))
 
 export const documentDeleteRequest = id => dispatch =>
-  superagent.delete(`${__API_URL__}/documents/${document._id}`)
+  superagent.delete(`${__API_URL__}/document/${document._id}`)
     .then(res => {
       util.log('documentDeleteRequest', res)
       dispatch(documentDelete())
@@ -53,11 +58,20 @@ export const documentDeleteRequest = id => dispatch =>
     })
     .catch(err => util.logError('documentDeleteRequest', err))
 
-export const documentFetchRequest = id => dispatch =>
-  superagent.get(`${__API_URL__}/documents/${id}`)
+export const documentFetchOneRequest = id => dispatch =>
+  superagent.get(`${__API_URL__}/document/${id}`)
     .then(res => {
-      util.log('documentFetchRequest', res.body)
-      dispatch(documentFetch(res.body))
+      util.log('documentFetchOneRequest', res.body)
+      dispatch(documentFetchOne(res.body))
       return res
     })
-    .catch(err => util.logError('documentFetchRequest', err))
+    .catch(err => util.logError('documentFetchOneRequest', err))
+
+export const documentFetchAllRequest = () => dispatch =>
+  superagent.get(`${__API_URL__}/document`)
+    .then(res => {
+      util.log('documentFetchAllRequest', res.body)
+      dispatch(documentFetchAll(res.body))
+      return res
+    })
+    .catch(err => util.logError('documentFetchAllRequest', err))

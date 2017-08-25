@@ -19,13 +19,15 @@ export class DocumentActiveContainer extends React.Component {
       [name]: value,
     }
     util.log('updatedDoc:', updatedDoc)
-    // this.props.documentUpdate(updatedDoc)
+    this.props.documentUpdate(updatedDoc)
   }
 
   componentWillMount() {
     let id = this.props.match.params[0]
+    if(!id)
+      this.props.history.push('/')
     util.log('url param:', id)
-    // this.props.documentFetch(id)
+    this.props.documentFetchOne(id)
   }
 
   render() {
@@ -61,8 +63,8 @@ export const mapStateToProps = state => ({
 })
 
 export const mapDispatchToProps = dispatch => ({
-  // documentFetch: id => dispatch(document.documentFetchRequest(id)),
-  // documentUpdate: document => dispatch(document.documentUpdateRequest(document)),
+  documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
+  documentUpdate: document => dispatch(document.documentUpdateRequest(document)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
