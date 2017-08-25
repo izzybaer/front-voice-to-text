@@ -15,9 +15,14 @@ export const documentDelete = () => ({
   type: 'DOCUMENT_DELETE',
 })
 
-export const documentFetch = document => ({
-  type: 'DOCUMENT_FETCH',
+export const documentFetchOne = document => ({
+  type: 'DOCUMENT_FETCH_ONE',
   payload: document,
+})
+
+export const documentFetchAll = documents => ({
+  type: 'DOCUMENT_FETCH_ALL',
+  payload: documents,
 })
 
 export const documentReset = () => ({
@@ -53,11 +58,20 @@ export const documentDeleteRequest = id => dispatch =>
     })
     .catch(err => util.logError('documentDeleteRequest', err))
 
-export const documentFetchRequest = id => dispatch =>
+export const documentFetchOneRequest = id => dispatch =>
   superagent.get(`${__API_URL__}/document/${id}`)
     .then(res => {
-      util.log('documentFetchRequest', res.body)
-      dispatch(documentFetch(res.body))
+      util.log('documentFetchOneRequest', res.body)
+      dispatch(documentFetchOne(res.body))
       return res
     })
-    .catch(err => util.logError('documentFetchRequest', err))
+    .catch(err => util.logError('documentFetchOneRequest', err))
+
+export const documentFetchAllRequest = () => dispatch =>
+  superagent.get(`${__API_URL__}/document`)
+    .then(res => {
+      util.log('documentFetchAllRequest', res.body)
+      dispatch(documentFetchAll(res.body))
+      return res
+    })
+    .catch(err => util.logError('documentFetchAllRequest', err))

@@ -7,8 +7,10 @@ export default (state = initialState, {type, payload}) => {
     return payload
   case 'DOCUMENT_DELETE':
     return initialState
-  case 'DOCUMENT_FETCH':
+  case 'DOCUMENT_FETCH_ONE':
     return payload
+  case 'DOCUMENT_FETCH_ALL':
+    return {...state, ...payload}
   case 'DOCUMENT_RESET':
     return initialState
   default:

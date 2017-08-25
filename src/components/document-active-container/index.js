@@ -27,7 +27,7 @@ export class DocumentActiveContainer extends React.Component {
     if(!id)
       this.props.history.push('/')
     util.log('url param:', id)
-    this.props.documentFetch(id)
+    this.props.documentFetchOne(id)
   }
 
   render() {
@@ -63,7 +63,7 @@ export const mapStateToProps = state => ({
 })
 
 export const mapDispatchToProps = dispatch => ({
-  documentFetch: id => dispatch(document.documentFetchRequest(id)),
+  documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
   documentUpdate: document => dispatch(document.documentUpdateRequest(document)),
 })
 
