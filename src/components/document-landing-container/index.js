@@ -12,7 +12,7 @@ export class DocumentLandingContainer extends React.Component {
   render() {
     return (
       <div className='document-landing-container'>
-
+        <button onClick={this.handleDocumentCreate}>New Document</button>
       </div>
     )
   }
