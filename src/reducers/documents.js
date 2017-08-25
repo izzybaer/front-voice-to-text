@@ -1,4 +1,4 @@
-let initialState = {}
+let initialState = []
 export default (state = initialState, {type, payload}) => {
   switch(type) {
   case 'DOCUMENT_CREATE':
@@ -8,9 +8,9 @@ export default (state = initialState, {type, payload}) => {
   case 'DOCUMENT_DELETE':
     return initialState
   case 'DOCUMENT_FETCH_ONE':
-    return payload
+    return [payload]
   case 'DOCUMENT_FETCH_ALL':
-    return {...state, ...payload}
+    return [...payload]
   case 'DOCUMENT_RESET':
     return initialState
   default:
