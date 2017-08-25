@@ -31,35 +31,42 @@ export class DocumentActiveContainer extends React.Component {
   }
 
   render() {
+    util.log('props', this.props.document)
     return (
       <div className='document-active-container'>
-        <input
-          name='title'
-          type='text'
-          placeholder='Title'
-          value={this.props.document.title}
-          onChange={this.handleChange}
-        />
-        <input
-          name='description'
-          type='text'
-          placeholder='Description'
-          value={this.props.document.description}
-          onChange={this.handleChange}
-        />
-        <textarea
-          name='body'
-          placeholder='Document body'
-          value={this.props.document.body}
-          onChange={this.handleChange}
-        />
+        {this.props.document
+          ? <form onSubmit={this.handleSubmit} name='active-doc'>
+            <input
+              name='title'
+              type='text'
+              placeholder='Title'
+              value={this.props.document.title}
+              onChange={this.handleChange}
+            />
+            <input
+              name='description'
+              type='text'
+              placeholder='Description'
+              value={this.props.document.description}
+              onChange={this.handleChange}
+            />
+            <textarea
+              name='body'
+              placeholder='Document body'
+              value={this.props.document.body}
+              onChange={this.handleChange}
+            />
+            <button type='submit'>Save</button>
+          </form>
+          : undefined
+        }
       </div>
     )
   }
 }
 
 export const mapStateToProps = state => ({
-  document: state.document,
+  document: state.document[0],
 })
 
 export const mapDispatchToProps = dispatch => ({

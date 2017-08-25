@@ -17,6 +17,16 @@ export class DocumentLandingContainer extends React.Component {
     this.handleDocumentCreate = this.handleDocumentCreate.bind(this)
   }
 
+  componentWillMount() {
+    this.props.documentsFetchAll()
+  }
+
+  componentWillUpdate() {
+    this.props.document.length > 1
+      ? this.props.documentsFetchAll()
+      : undefined
+  }
+
   handleDocumentCreate(doc) {
     this.props.documentCreate(doc)
       .then(() => {
@@ -28,7 +38,7 @@ export class DocumentLandingContainer extends React.Component {
     return (
       <div className='document-landing-container'>
         <DocumentCreateForm handleComplete={this.handleDocumentCreate} />
-        <DocumentBrowseContainer />
+        <DocumentBrowseContainer allDocs={this.props.document} />
       </div>
     )
   }
@@ -40,6 +50,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = dispatch => ({
   documentCreate: doc => dispatch(document.documentCreateRequest(doc)),
+  documentsFetchAll: () => dispatch(document.documentFetchAllRequest()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentLandingContainer)
