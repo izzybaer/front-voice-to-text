@@ -25,7 +25,7 @@ export const documentReset = () => ({
 })
 
 export const documentCreateRequest = document => dispatch =>
-  superagent.post(`${__API_URL__}/documents`)
+  superagent.post(`${__API_URL__}/document`)
     .send(document)
     .then(res => {
       util.log('documentCreateRequest', res.body)
@@ -35,7 +35,7 @@ export const documentCreateRequest = document => dispatch =>
     .catch(err => util.logError('documentCreateRequest', err))
 
 export const documentUpdateRequest = document => dispatch =>
-  superagent.put(`${__API_URL__}/documents/${document._id}`)
+  superagent.put(`${__API_URL__}/document/${document._id}`)
     .send(document)
     .then(res => {
       util.log('documentUpdateRequest', res.body)
@@ -45,7 +45,7 @@ export const documentUpdateRequest = document => dispatch =>
     .catch(err => util.logError('documentUpdateRequest', err))
 
 export const documentDeleteRequest = id => dispatch =>
-  superagent.delete(`${__API_URL__}/documents/${document._id}`)
+  superagent.delete(`${__API_URL__}/document/${document._id}`)
     .then(res => {
       util.log('documentDeleteRequest', res)
       dispatch(documentDelete())
@@ -54,7 +54,7 @@ export const documentDeleteRequest = id => dispatch =>
     .catch(err => util.logError('documentDeleteRequest', err))
 
 export const documentFetchRequest = id => dispatch =>
-  superagent.get(`${__API_URL__}/documents/${id}`)
+  superagent.get(`${__API_URL__}/document/${id}`)
     .then(res => {
       util.log('documentFetchRequest', res.body)
       dispatch(documentFetch(res.body))
