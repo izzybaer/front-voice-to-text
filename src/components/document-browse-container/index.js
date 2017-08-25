@@ -1,4 +1,8 @@
 import React from 'react'
+import {connect} from 'react-redux'
+
+import * as util from '../../lib/util.js'
+import * as document from '../../actions/document-actions.js'
 
 export class DocumentBrowseContainer extends React.Component {
   constructor(props) {
@@ -7,11 +11,20 @@ export class DocumentBrowseContainer extends React.Component {
 
   }
 
-  render() {
-    return (
-      <div className='document-browse-container'>
+  componentWillMount() {
+    this.props.documentsFetchAll()
+      .then(() => {
 
-      </div>
+      })
+
+  }
+
+  render() {
+    util.log(this.props.documents)
+    return (
+      <ul className='document-browse-container'>
+
+      </ul>
     )
   }
 }
@@ -21,5 +34,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  documentsFetch: () => dispatch(document.fetchAll),
+  documentsFetchAll: () => dispatch(document.documentFetchAllRequest()),
 })
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentBrowseContainer)
