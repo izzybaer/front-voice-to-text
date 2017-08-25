@@ -51,3 +51,29 @@ describe('Testing document actions', () => {
     expect(result.payload).toBeUndefined()
   })
 })
+
+// describe('Testing document action requests', () => {
+//
+//   test('documentCreateRequest', () => {
+//     let dispatch = res => res
+//     let dummyDoc = {
+//       title: 'test title',
+//       description: 'test description',
+//       body: '',
+//     }
+//     return document.documentCreateRequest(dummyDoc)(dispatch)
+//       .then(res => {
+//         expect(res.body._id).toBeDefined()
+//         expect(res.body.title).toEqual(dummyDoc.title)
+//         expect(res.body.description).toEqual(dummyDoc.description)
+//         expect(res.body.body).toEqual(dummyDoc.body)
+//         return res
+//       })
+//       .then(res => {
+//         return document.documentDeleteRequest(res.body._id)(dispatch)
+//       })
+//       .then(res => {
+//         expect(res.status).toEqual(204)
+//       })
+//   })
+// })
