@@ -50,7 +50,7 @@ export const documentUpdateRequest = document => dispatch =>
     .catch(err => util.logError('documentUpdateRequest', err))
 
 export const documentDeleteRequest = id => dispatch =>
-  superagent.delete(`${__API_URL__}/document/${document._id}`)
+  superagent.delete(`${__API_URL__}/document/${id}`)
     .then(res => {
       util.log('documentDeleteRequest', res)
       dispatch(documentDelete())
