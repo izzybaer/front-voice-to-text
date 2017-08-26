@@ -3,11 +3,12 @@ import {connect} from 'react-redux'
 import brace from 'brace'
 import AceEditor from 'react-ace'
 
-import 'brace/mode/markdown'
 import 'brace/theme/github'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
+
+import VoiceRecognitionContainer from '../voice-recognition-container'
 
 export class DocumentActiveContainer extends React.Component {
   constructor(props) {
@@ -16,10 +17,12 @@ export class DocumentActiveContainer extends React.Component {
       title: '',
       description: '',
       body: '',
+      temp: '',
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
+    this.handleVoiceResults = this.handleVoiceResults.bind(this)
   }
 
   handleSave(event) {
@@ -50,6 +53,29 @@ export class DocumentActiveContainer extends React.Component {
     // this.props.documentUpdate(updatedDoc)
   }
 
+  handleVoiceResults(final, temp) {
+    util.log('final', final)
+    util.log('temp', temp)
+    this.setState({
+      body: `${this.state.body}${final}`,
+      temp: temp,
+    })
+  }
+
+  shouldComponentUpdate(nextProps){
+    if(nextProps.temp == this.state.temp)
+      return false
+    // if(this.props.edits && this.props.edits.length > 0) {
+    //   let edits = this.props.edits[this.props.edits.length - 1];
+    //   this.setState({
+    //     final: edits.body,
+    //     title: edits.title,
+    //     description: edits.description,
+    //   });
+    // }
+    return true
+  }
+
   componentWillMount() {
     let id = this.props.match.params[0]
     if(!id)
@@ -65,6 +91,7 @@ export class DocumentActiveContainer extends React.Component {
     util.log('props', this.state)
     return (
       <div className='document-active-container'>
+        <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
         {this.props.document
           ? <form onSubmit={this.handleSave} name='active-doc'>
             <input
@@ -82,15 +109,17 @@ export class DocumentActiveContainer extends React.Component {
               onChange={this.handleChange}
             />
             <AceEditor
-              mode="markdown"
+              mode='text'
               theme="github"
               name='body'
               height='200px'
+              wrapEnabled={true}
               placeholder='Document body'
               value={this.state.body}
               onChange={this.handleChange}
               editorProps={{$blockScrolling: true}}
             />
+            <p name='temp-text'>{this.state.temp}</p>
             <button type='submit'>Save</button>
           </form>
           : undefined
