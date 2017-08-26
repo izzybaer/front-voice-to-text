@@ -13,18 +13,28 @@ export class DocumentBrowseContainer extends React.Component {
     this.handleDelete = this.handleDelete.bind(this)
   }
 
+  componentWillMount() {
+    this.props.documentsFetchAll()
+  }
+
+  componentWillUpdate() {
+    this.props.document.length > 1
+      ? this.props.documentsFetchAll()
+      : undefined
+  }
+
   handleDelete(id) {
     this.props.documentDelete(id)
   }
 
   render() {
-    util.log('render',this.props.allDocs)
+    util.log('render',this.props.document)
     return (
       <div className='document-browse-container'>
         <h3>Browse All Documents</h3>
         <ul className='document-browse-list'>
-          {Object.keys(this.props.allDocs).length > 0
-            ? this.props.allDocs.map((doc, i) =>
+          {Array.isArray(this.props.document) && Object.keys(this.props.document).length > 0
+            ? this.props.document.map((doc, i) =>
               <li key={i}>
                 <button onClick={() => this.handleDelete(doc._id)}>X</button>
                 <Link to={`/document/${doc._id}`}>{doc.title} - {doc.description}</Link>
@@ -38,10 +48,11 @@ export class DocumentBrowseContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  allDocs: state.document,
+  document: state.document,
 })
 
 const mapDispatchToProps = dispatch => ({
+  documentsFetchAll: () => dispatch(document.documentFetchAllRequest()),
   documentDelete: id => dispatch(document.documentDeleteRequest(id)),
 })
 
