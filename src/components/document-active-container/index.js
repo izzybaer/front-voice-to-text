@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import brace from 'brace'
 import AceEditor from 'react-ace'
 
-import 'brace/mode/markdown'
 import 'brace/theme/github'
 
 import * as util from '../../lib/util.js'
@@ -56,6 +55,7 @@ export class DocumentActiveContainer extends React.Component {
   handleVoiceResults(final, temp) {
     util.log('final', final)
     util.log('temp', temp)
+    this.setState({ body: `${final} ${temp}`})
   }
 
   componentWillMount() {
@@ -91,10 +91,11 @@ export class DocumentActiveContainer extends React.Component {
               onChange={this.handleChange}
             />
             <AceEditor
-              mode="markdown"
+              mode='text'
               theme="github"
               name='body'
               height='200px'
+              wrapEnabled={true}
               placeholder='Document body'
               value={this.state.body}
               onChange={this.handleChange}
