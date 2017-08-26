@@ -1,5 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import brace from 'brace'
+import AceEditor from 'react-ace'
+
+import 'brace/mode/markdown'
+import 'brace/theme/github'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
@@ -19,12 +24,11 @@ export class DocumentActiveContainer extends React.Component {
 
   handleSave(event) {
     event.preventDefault()
-    let targ = event.target
     let updatedDoc = {
       _id: this.props.match.params[0],
-      title: targ.title.value,
-      description: targ.description.value,
-      body: targ.body.value,
+      title: this.state.title,
+      description: this.state.description,
+      body: this.state.body,
     }
     this.props.documentUpdate(updatedDoc)
       .then(doc => {
@@ -33,8 +37,11 @@ export class DocumentActiveContainer extends React.Component {
   }
 
   handleChange(event) {
-    let {name, value} = event.target
-    this.setState({ [name]: value })
+    if(event.target) {
+      let {name, value} = event.target
+      this.setState({ [name]: value })
+    } else
+      this.setState({ body: event })
     // let updatedDoc = {
     //   ...this.props.document,
     //   [name]: value,
@@ -74,11 +81,15 @@ export class DocumentActiveContainer extends React.Component {
               value={this.state.description}
               onChange={this.handleChange}
             />
-            <textarea
+            <AceEditor
+              mode="markdown"
+              theme="github"
               name='body'
+              height='200px'
               placeholder='Document body'
               value={this.state.body}
               onChange={this.handleChange}
+              editorProps={{$blockScrolling: true}}
             />
             <button type='submit'>Save</button>
           </form>
