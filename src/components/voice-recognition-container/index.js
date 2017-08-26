@@ -43,7 +43,6 @@ export class VoiceRecognitionContainer extends React.Component {
         return
       }
 
-      // add a line break for each new final
       for(let i = event.resultIndex; i < event.results.length; ++i) {
         if(event.results[i].isFinal) {
           this.setState(state => ({finalTranscript: `${state.finalTranscript}\n${event.results[i][0].transcript}`}))
