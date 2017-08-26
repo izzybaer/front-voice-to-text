@@ -17,6 +17,7 @@ export class DocumentActiveContainer extends React.Component {
       title: '',
       description: '',
       body: '',
+      temp: '',
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -55,7 +56,24 @@ export class DocumentActiveContainer extends React.Component {
   handleVoiceResults(final, temp) {
     util.log('final', final)
     util.log('temp', temp)
-    this.setState({ body: `${final} ${temp}`})
+    this.setState({
+      body: `${this.state.body}${final}`,
+      temp: temp,
+    })
+  }
+
+  shouldComponentUpdate(nextProps){
+    if(nextProps.temp == this.state.temp)
+      return false
+    // if(this.props.edits && this.props.edits.length > 0) {
+    //   let edits = this.props.edits[this.props.edits.length - 1];
+    //   this.setState({
+    //     final: edits.body,
+    //     title: edits.title,
+    //     description: edits.description,
+    //   });
+    // }
+    return true
   }
 
   componentWillMount() {
@@ -101,6 +119,7 @@ export class DocumentActiveContainer extends React.Component {
               onChange={this.handleChange}
               editorProps={{$blockScrolling: true}}
             />
+            <p name='temp-text'>{this.state.temp}</p>
             <button type='submit'>Save</button>
           </form>
           : undefined
