@@ -9,6 +9,8 @@ import 'brace/theme/github'
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
 
+import VoiceRecognitionContainer from '../voice-recognition-container'
+
 export class DocumentActiveContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -20,6 +22,7 @@ export class DocumentActiveContainer extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
+    this.handleVoiceResults = this.handleVoiceResults.bind(this)
   }
 
   handleSave(event) {
@@ -50,6 +53,11 @@ export class DocumentActiveContainer extends React.Component {
     // this.props.documentUpdate(updatedDoc)
   }
 
+  handleVoiceResults(final, temp) {
+    util.log('final', final)
+    util.log('temp', temp)
+  }
+
   componentWillMount() {
     let id = this.props.match.params[0]
     if(!id)
@@ -65,6 +73,7 @@ export class DocumentActiveContainer extends React.Component {
     util.log('props', this.state)
     return (
       <div className='document-active-container'>
+        <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
         {this.props.document
           ? <form onSubmit={this.handleSave} name='active-doc'>
             <input
