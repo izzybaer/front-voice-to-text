@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import brace from 'brace'
 import AceEditor from 'react-ace'
 
-import 'brace/theme/github'
+import 'brace/theme/monokai'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
@@ -110,13 +110,17 @@ export class DocumentActiveContainer extends React.Component {
             />
             <AceEditor
               mode='text'
-              theme="github"
+              theme="monokai"
               name='body'
               height='200px'
+              width='100%'
+              fontSize='15px'
               wrapEnabled={true}
               placeholder='Document body'
               value={this.state.body}
               onChange={this.handleChange}
+              showGutter={false}
+              showPrintMargin={false}
               editorProps={{$blockScrolling: true}}
             />
             <p name='temp-text'>{this.state.temp}</p>

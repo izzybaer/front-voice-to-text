@@ -36,14 +36,13 @@ export class VoiceRecognitionContainer extends React.Component {
       this.setState({ listening: false })
     }
     recognition.onresult = (event) => {
-      this.setState({ tempTranscript: '' })
+      this.setState({ tempTranscript: '', finalTranscript: '' })
       if(typeof(event.results) == 'undefined') {
         this.state.recognition.stop()
         // upgrade your browser
         return
       }
 
-      // add a line break for each new final
       for(let i = event.resultIndex; i < event.results.length; ++i) {
         if(event.results[i].isFinal) {
           this.setState(state => ({finalTranscript: `${state.finalTranscript}\n${event.results[i][0].transcript}`}))
