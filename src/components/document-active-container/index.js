@@ -75,7 +75,7 @@ export class DocumentActiveContainer extends React.Component {
   componentWillMount() {
     let id = this.props.match.params[0]
     if(!id)
-      this.props.history.push('/')
+      return this.props.history.push('/')
     util.log('url param:', id)
     this.props.documentFetchOne(id)
       .then(doc => {
@@ -128,11 +128,12 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
+  editHistory: state.editHistory,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
+  documentUpdate: newDoc => dispatch(document.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
