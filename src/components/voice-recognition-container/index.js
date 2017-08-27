@@ -1,5 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import superagent from 'superagent'
+
 
 import * as util from '../../lib/util.js'
 
@@ -48,15 +50,38 @@ export class VoiceRecognitionContainer extends React.Component {
 
       for(let i = event.resultIndex; i < event.results.length; ++i) {
         if(event.results[i].isFinal) {
-          this.setState(state => ({finalTranscript: `${state.finalTranscript}${event.results[i][0].transcript}\n`}))
+          this.setState(state => ({ finalTranscript: `${event.results[i][0].transcript}\n` }))
+          this.handleResults(this.state.finalTranscript, this.state.tempTranscript)
+
+          // let capitalizedFinal = this.capitalize(`${this.state.finalTranscript}${event.results[i][0].transcript}\n`)
+          // superagent.post(`https://api.textgears.com/check.php?text=${encodeURI(capitalizedFinal)}&key=OZnZEAWpA377Y6S4`)
+          //   .then(res => {
+          //     util.log('GRAMMER', res.body)
+          //     if(res.body.errors.length > 0)
+          //       res.body.errors.forEach(err => {
+          //         let firstHalf = capitalizedFinal.slice(0, err.offset)
+          //         let lastHalf = capitalizedFinal.slice(err.offset + err.length)
+          //         capitalizedFinal = `${firstHalf}${err.better[0]}${lastHalf}`
+          //       })
+          //     this.setState(state => ({ finalTranscript: capitalizedFinal }))
+          //     this.handleResults(this.state.finalTranscript, this.state.tempTranscript)
+          //   })
+          //   .catch(err => {
+          //     this.setState(state => ({ finalTranscript: capitalizedFinal }))
+          //     this.handleResults(this.state.finalTranscript, this.state.tempTranscript)
+          //   })
         } else {
           this.setState(state => ({tempTranscript: state.tempTranscript += event.results[i][0].transcript}))
+
+          this.handleResults(this.state.finalTranscript, this.state.tempTranscript)
         }
       }
+
+      // comment next out if api is enabled
       this.setState(state => ({finalTranscript: this.capitalize(state.finalTranscript)}))
       // final_span.innerHTML = linebreak(final_transcript)
       // interim_span.innerHTML = linebreak(interim_transcript)
-      this.handleResults(this.state.finalTranscript, this.state.tempTranscript)
+
     }
 
     this.setState({ recognition })
