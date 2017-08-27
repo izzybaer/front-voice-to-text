@@ -87,6 +87,7 @@ export class DocumentActiveContainer extends React.Component {
     util.log('props', this.state)
     return (
       <div className='document-active-container'>
+        <h4>Your document will auto-save on any change to it.</h4>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
         <form name='active-doc'>
           <input
