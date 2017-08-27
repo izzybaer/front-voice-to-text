@@ -87,6 +87,7 @@ export class DocumentActiveContainer extends React.Component {
     util.log('props', this.state)
     return (
       <div className='document-active-container'>
+        <h4>Your document will auto-save on any change to it.</h4>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
         <form name='active-doc'>
           <input
@@ -127,11 +128,12 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
+  editHistory: state.editHistory,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
+  documentUpdate: newDoc => dispatch(document.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
