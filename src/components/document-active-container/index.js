@@ -88,7 +88,7 @@ export class DocumentActiveContainer extends React.Component {
     return (
       <div className='document-active-container'>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
-        <form onSubmit={this.handleSave} name='active-doc'>
+        <form name='active-doc'>
           <input
             name='title'
             type='text'
@@ -119,7 +119,6 @@ export class DocumentActiveContainer extends React.Component {
             editorProps={{$blockScrolling: true}}
           />
           <p name='temp-text'>{this.state.temp}</p>
-          <button type='submit'>Save</button>
         </form>
       </div>
     )
