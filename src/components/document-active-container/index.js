@@ -18,11 +18,22 @@ export class DocumentActiveContainer extends React.Component {
       description: '',
       body: '',
       temp: '',
+      direction: 'down',
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleVoiceResults = this.handleVoiceResults.bind(this)
+    this.handleDirectionChange = this.handleDirectionChange.bind(this)
+  }
+
+  handleDirectionChange(event) {
+    event.preventDefault()
+    this.setState(state => ({
+      direction: state.direction === 'down'
+        ? 'up'
+        : 'down',
+    }))
   }
 
   handleSave(event) {
@@ -56,6 +67,7 @@ export class DocumentActiveContainer extends React.Component {
   handleVoiceResults(final, temp) {
     util.log('final', final)
     util.log('temp', temp)
+
     this.setState({
       body: `${this.state.body}${final}`,
       temp: temp,
@@ -111,10 +123,10 @@ export class DocumentActiveContainer extends React.Component {
             <AceEditor
               mode='text'
               theme="monokai"
+              maxLines={Infinity}
               name='body'
-              height='200px'
               width='100%'
-              fontSize='15px'
+              fontSize='16px'
               wrapEnabled={true}
               placeholder='Document body'
               value={this.state.body}

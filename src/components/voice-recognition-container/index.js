@@ -19,20 +19,23 @@ export class VoiceRecognitionContainer extends React.Component {
   }
 
   componentWillMount() {
-    let recognizing = false
     let recognition = new webkitSpeechRecognition()
     recognition.lang = 'english'
     recognition.continuous = true
     recognition.interimResults = true
     recognition.onstart = () => {
-      recognizing = true
+      util.log('RECOGNITION START')
       this.setState({ listening: true })
     }
     recognition.onerror = (event) => {
       util.log(event.error)
     }
     recognition.onend = () => {
-      recognizing = false
+      if(this.state.listening) {
+        this.state.recognition.start()
+        return
+      }
+      util.log('RECOGNITION STOP')
       this.setState({ listening: false })
     }
     recognition.onresult = (event) => {
@@ -45,7 +48,7 @@ export class VoiceRecognitionContainer extends React.Component {
 
       for(let i = event.resultIndex; i < event.results.length; ++i) {
         if(event.results[i].isFinal) {
-          this.setState(state => ({finalTranscript: `${state.finalTranscript}\n${event.results[i][0].transcript}`}))
+          this.setState(state => ({finalTranscript: `${state.finalTranscript}${event.results[i][0].transcript}\n`}))
         } else {
           this.setState(state => ({tempTranscript: state.tempTranscript += event.results[i][0].transcript}))
         }
@@ -87,6 +90,7 @@ export class VoiceRecognitionContainer extends React.Component {
   handleListenStop(event) {
     event.preventDefault()
 
+    this.setState({ listening: false })
     this.state.recognition.stop()
   }
 
