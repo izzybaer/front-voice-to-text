@@ -36,8 +36,7 @@ export class DocumentActiveContainer extends React.Component {
     }))
   }
 
-  handleSave(event) {
-    event.preventDefault()
+  handleSave() {
     let updatedDoc = {
       _id: this.props.match.params[0],
       title: this.state.title,
@@ -45,9 +44,6 @@ export class DocumentActiveContainer extends React.Component {
       body: this.state.body,
     }
     this.props.documentUpdate(updatedDoc)
-      .then(doc => {
-        this.props.documentFetchOne(doc.body._id)
-      })
   }
 
   handleChange(event) {
@@ -56,12 +52,7 @@ export class DocumentActiveContainer extends React.Component {
       this.setState({ [name]: value })
     } else
       this.setState({ body: event })
-    // let updatedDoc = {
-    //   ...this.props.document,
-    //   [name]: value,
-    // }
-    // util.log('updatedDoc:', updatedDoc)
-    // this.props.documentUpdate(updatedDoc)
+    this.handleSave()
   }
 
   handleVoiceResults(final, temp) {
@@ -72,19 +63,12 @@ export class DocumentActiveContainer extends React.Component {
       body: `${this.state.body}${final}`,
       temp: temp,
     })
+    this.handleSave()
   }
 
   shouldComponentUpdate(nextProps){
     if(nextProps.temp == this.state.temp)
       return false
-    // if(this.props.edits && this.props.edits.length > 0) {
-    //   let edits = this.props.edits[this.props.edits.length - 1];
-    //   this.setState({
-    //     final: edits.body,
-    //     title: edits.title,
-    //     description: edits.description,
-    //   });
-    // }
     return true
   }
 
@@ -104,42 +88,39 @@ export class DocumentActiveContainer extends React.Component {
     return (
       <div className='document-active-container'>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
-        {this.props.document
-          ? <form onSubmit={this.handleSave} name='active-doc'>
-            <input
-              name='title'
-              type='text'
-              placeholder='Title'
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-            <input
-              name='description'
-              type='text'
-              placeholder='Description'
-              value={this.state.description}
-              onChange={this.handleChange}
-            />
-            <AceEditor
-              mode='text'
-              theme="monokai"
-              maxLines={Infinity}
-              name='body'
-              width='100%'
-              fontSize='16px'
-              wrapEnabled={true}
-              placeholder='Document body'
-              value={this.state.body}
-              onChange={this.handleChange}
-              showGutter={false}
-              showPrintMargin={false}
-              editorProps={{$blockScrolling: true}}
-            />
-            <p name='temp-text'>{this.state.temp}</p>
-            <button type='submit'>Save</button>
-          </form>
-          : undefined
-        }
+        <form onSubmit={this.handleSave} name='active-doc'>
+          <input
+            name='title'
+            type='text'
+            placeholder='Title'
+            value={this.state.title}
+            onChange={this.handleChange}
+          />
+          <input
+            name='description'
+            type='text'
+            placeholder='Description'
+            value={this.state.description}
+            onChange={this.handleChange}
+          />
+          <AceEditor
+            mode='text'
+            theme="monokai"
+            maxLines={Infinity}
+            name='body'
+            width='100%'
+            fontSize='16px'
+            wrapEnabled={true}
+            placeholder='Document body'
+            value={this.state.body}
+            onChange={this.handleChange}
+            showGutter={false}
+            showPrintMargin={false}
+            editorProps={{$blockScrolling: true}}
+          />
+          <p name='temp-text'>{this.state.temp}</p>
+          <button type='submit'>Save</button>
+        </form>
       </div>
     )
   }
