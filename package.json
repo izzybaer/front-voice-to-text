@@ -20,6 +20,7 @@
     "test-watch": "jest --watch --runInBand",
     "lint": "eslint . --fix",
     "build": "webpack",
+    "heroku-postbuild": "webpack",
     "start": "node index.js",
     "watch": "webpack-dev-server --inline --hot"
   },
