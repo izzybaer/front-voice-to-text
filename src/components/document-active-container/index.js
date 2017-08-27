@@ -75,7 +75,7 @@ export class DocumentActiveContainer extends React.Component {
   componentWillMount() {
     let id = this.props.match.params[0]
     if(!id)
-      return this.props.history.push('/')
+      this.props.history.push('/')
     util.log('url param:', id)
     this.props.documentFetchOne(id)
       .then(doc => {

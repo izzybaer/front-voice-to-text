@@ -5,4 +5,4 @@ import {reduxIO} from './io.js'
 
 import {createStore, applyMiddleware} from 'redux'
 
-export default () => createStore(reducer, applyMiddleware(reduxIO, thunk, reporter))
+export default () => createStore(reducer, applyMiddleware(thunk, reporter, reduxIO))
