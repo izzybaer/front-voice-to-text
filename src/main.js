@@ -11,7 +11,7 @@ import editSubscribers from './subscribers/edit.js'
 
 const store = storeCreate()
 
-io(store, editSubscribers)
+// io(store, editSubscribers)
 
 let AppContainer = () =>
   <Provider store={store}>

@@ -39,15 +39,33 @@ export class DocumentActiveContainer extends React.Component {
   handleChange(event) {
     if(event.target) {
       let {name, value} = event.target
+      // let update = {
+      //   _id: this.props.match.params[0],
+      //   [name]: value,
+      // }
+      // this.props.documentUpdate(update)
       this.setState({ [name]: value })
-    } else
+    } else{
+      // let update = {
+      //   _id: this.props.match.params[0],
+      //   body: event,
+      // }
+      // this.props.documentUpdate(update)
       this.setState({ body: event })
+    }
     this.handleSave()
   }
 
   handleVoiceResults(final, temp) {
     util.log('final', final)
     util.log('temp', temp)
+
+    // let update = {
+    //   body: `${this.props.latestEdit.body}${final}`,
+    // }
+    // this.props.documentUpdate(update)
+    //
+    // this.setState({ temp })
 
     this.setState({
       body: `${this.state.body}${final}`,
@@ -74,7 +92,7 @@ export class DocumentActiveContainer extends React.Component {
   }
 
   render() {
-    util.log('props', this.state)
+    // util.log('props', this.state)
     return (
       <div className='document-active-container'>
         <h4>Your document will auto-save on any change to it.</h4>
@@ -84,14 +102,14 @@ export class DocumentActiveContainer extends React.Component {
             name='title'
             type='text'
             placeholder='Title'
-            value={this.props.latestEdit.title}
+            value={this.state.title}
             onChange={this.handleChange}
           />
           <input
             name='description'
             type='text'
             placeholder='Description'
-            value={this.props.latestEdit.description}
+            value={this.state.description}
             onChange={this.handleChange}
           />
           <AceEditor
@@ -103,7 +121,7 @@ export class DocumentActiveContainer extends React.Component {
             fontSize='16px'
             wrapEnabled={true}
             placeholder='Document body'
-            value={this.props.latestEdit.body}
+            value={this.state.body}
             onChange={this.handleChange}
             showGutter={false}
             showPrintMargin={false}
@@ -118,12 +136,13 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  latestEdit: state.edit,
+  // latestEdit: state.edit,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
+  documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
+  // documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
