@@ -1,11 +1,6 @@
 import superagent from 'superagent'
 import * as util from '../lib/util.js'
 
-export const edit = edit => ({
-  payload: edit,
-  type: 'EDIT',
-})
-
 export const documentCreate = document => ({
   type: 'DOCUMENT_CREATE',
   payload: document,

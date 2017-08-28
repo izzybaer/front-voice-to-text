@@ -6,7 +6,7 @@ export const socket = io(`${__API_URL__}`)
 export const reduxIO = store => next => action => {
   if(typeof action === 'object') {
     if(!action.blockPublish)
-      socket.emit(action.type, action.payload)
+      socket.emit('EDIT', action.payload)
   }
   next(action)
 }
@@ -15,7 +15,7 @@ export default (store, subscribers) => {
   Object.keys(subscribers)
     .map(type => ({ type, handler: subscribers[type] }))
     .forEach(subscriber => {
-      socket.on(subscriber.type, payload => {
+      socket.on('EDIT', payload => {
         util.log('__SUBSCRIBE_EVENT__', subscriber.type, payload)
         try {
           let fakeStore = {

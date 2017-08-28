@@ -1,7 +1,7 @@
-import * as document from '../actions/document-actions.js'
+import * as edit from '../actions/edit-actions.js'
 
 const EDIT = store => socket => payload => {
-  store.dispatch(document.edit(payload))
+  store.dispatch(edit.edit(payload))
 }
 
 export default {EDIT}

@@ -7,6 +7,7 @@ import 'brace/theme/monokai'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
+import * as edit from '../../actions/edit-actions.js'
 
 import VoiceRecognitionContainer from '../voice-recognition-container'
 
@@ -53,6 +54,10 @@ export class DocumentActiveContainer extends React.Component {
     } else
       this.setState({ body: event })
     this.handleSave()
+    util.log('history',  this.props.editHistory[this.props.editHistory.length - 1])
+    this.setState({
+      ...this.props.editHistory[this.props.editHistory.length - 1],
+    })
   }
 
   handleVoiceResults(final, temp) {
@@ -128,12 +133,12 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  editHistory: state.editHistory,
+  editHistory: state.edit || [],
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(document.edit(newDoc)),
+  documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
