@@ -19,22 +19,11 @@ export class DocumentActiveContainer extends React.Component {
       description: '',
       body: '',
       temp: '',
-      direction: 'down',
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleVoiceResults = this.handleVoiceResults.bind(this)
-    this.handleDirectionChange = this.handleDirectionChange.bind(this)
-  }
-
-  handleDirectionChange(event) {
-    event.preventDefault()
-    this.setState(state => ({
-      direction: state.direction === 'down'
-        ? 'up'
-        : 'down',
-    }))
   }
 
   handleSave() {
@@ -54,10 +43,6 @@ export class DocumentActiveContainer extends React.Component {
     } else
       this.setState({ body: event })
     this.handleSave()
-    util.log('history',  this.props.editHistory[this.props.editHistory.length - 1])
-    this.setState({
-      ...this.props.editHistory[this.props.editHistory.length - 1],
-    })
   }
 
   handleVoiceResults(final, temp) {
@@ -99,14 +84,14 @@ export class DocumentActiveContainer extends React.Component {
             name='title'
             type='text'
             placeholder='Title'
-            value={this.state.title}
+            value={this.props.latestEdit.title}
             onChange={this.handleChange}
           />
           <input
             name='description'
             type='text'
             placeholder='Description'
-            value={this.state.description}
+            value={this.props.latestEdit.description}
             onChange={this.handleChange}
           />
           <AceEditor
@@ -118,7 +103,7 @@ export class DocumentActiveContainer extends React.Component {
             fontSize='16px'
             wrapEnabled={true}
             placeholder='Document body'
-            value={this.state.body}
+            value={this.props.latestEdit.body}
             onChange={this.handleChange}
             showGutter={false}
             showPrintMargin={false}
@@ -133,7 +118,7 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  editHistory: state.edit || [],
+  latestEdit: state.edit,
 })
 
 export const mapDispatchToProps = dispatch => ({
