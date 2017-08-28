@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
 
 import document from './documents.js'
-import editHistory from './edit-history.js'
+import edit from './edit.js'
 
-export default combineReducers({ document, editHistory })
+export default combineReducers({ document, edit })
