@@ -19,22 +19,11 @@ export class DocumentActiveContainer extends React.Component {
       description: '',
       body: '',
       temp: '',
-      direction: 'down',
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleVoiceResults = this.handleVoiceResults.bind(this)
-    this.handleDirectionChange = this.handleDirectionChange.bind(this)
-  }
-
-  handleDirectionChange(event) {
-    event.preventDefault()
-    this.setState(state => ({
-      direction: state.direction === 'down'
-        ? 'up'
-        : 'down',
-    }))
   }
 
   handleSave() {
@@ -50,19 +39,33 @@ export class DocumentActiveContainer extends React.Component {
   handleChange(event) {
     if(event.target) {
       let {name, value} = event.target
+      // let update = {
+      //   _id: this.props.match.params[0],
+      //   [name]: value,
+      // }
+      // this.props.documentUpdate(update)
       this.setState({ [name]: value })
-    } else
+    } else{
+      // let update = {
+      //   _id: this.props.match.params[0],
+      //   body: event,
+      // }
+      // this.props.documentUpdate(update)
       this.setState({ body: event })
+    }
     this.handleSave()
-    util.log('history',  this.props.editHistory[this.props.editHistory.length - 1])
-    this.setState({
-      ...this.props.editHistory[this.props.editHistory.length - 1],
-    })
   }
 
   handleVoiceResults(final, temp) {
     util.log('final', final)
     util.log('temp', temp)
+
+    // let update = {
+    //   body: `${this.props.latestEdit.body}${final}`,
+    // }
+    // this.props.documentUpdate(update)
+    //
+    // this.setState({ temp })
 
     this.setState({
       body: `${this.state.body}${final}`,
@@ -89,7 +92,7 @@ export class DocumentActiveContainer extends React.Component {
   }
 
   render() {
-    util.log('props', this.state)
+    // util.log('props', this.state)
     return (
       <div className='document-active-container'>
         <h4>Your document will auto-save on any change to it.</h4>
@@ -133,12 +136,13 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  editHistory: state.edit || [],
+  // latestEdit: state.edit,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
+  documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
+  // documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
