@@ -10,6 +10,7 @@ import * as document from '../../actions/document-actions.js'
 import * as edit from '../../actions/edit-actions.js'
 
 import VoiceRecognitionContainer from '../voice-recognition-container'
+import SpeakToMe from '../speak-to-me'
 
 export class DocumentActiveContainer extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export class DocumentActiveContainer extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleVoiceResults = this.handleVoiceResults.bind(this)
+    this.handleSpeak = this.handleSpeak.bind(this)
   }
 
   handleSave() {
@@ -74,6 +76,34 @@ export class DocumentActiveContainer extends React.Component {
     this.handleSave()
   }
 
+  handleSpeak(settings) {
+    // let synth = window.speechSynthesis
+
+    let speech = new SpeechSynthesisUtterance(this.state.body)
+
+    // util.log('synth', synth)
+    util.log('speech', speech)
+
+    speech.volume = 1
+    speech.rate = 1
+    speech.pitch = 1
+
+    // if(settings.lang)
+    //   speech.lang = settings.lang
+    // if(settings.volume)
+    //   speech.volume = settings.volume
+    // if(settings.voice)
+    //   speech.voice = settings.voice
+    // if(settings.pitch)
+    //   speech.pitch = settings.pitch
+    // if(settings.rate)
+    //   speech.rate = settings.rate
+
+    window.speechSynthesis.speak(speech)
+
+    // util.log('synth after', synth)
+  }
+
   shouldComponentUpdate(nextProps){
     if(nextProps.temp == this.state.temp)
       return false
@@ -97,6 +127,7 @@ export class DocumentActiveContainer extends React.Component {
       <div className='document-active-container'>
         <h4>Your document will auto-save on any change to it.</h4>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
+        <SpeakToMe speak={this.handleSpeak} />
         <form name='active-doc'>
           <input
             name='title'
