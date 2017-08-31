@@ -10,7 +10,7 @@ import * as document from '../../actions/document-actions.js'
 import * as edit from '../../actions/edit-actions.js'
 
 import VoiceRecognitionContainer from '../voice-recognition-container'
-import SpeakToMe from '../speak-to-me'
+// import SpeakToMe from '../speak-to-me'
 
 export class DocumentActiveContainer extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ export class DocumentActiveContainer extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleVoiceResults = this.handleVoiceResults.bind(this)
-    this.handleSpeak = this.handleSpeak.bind(this)
+    // this.handleSpeak = this.handleSpeak.bind(this)
   }
 
   handleSave() {
@@ -41,21 +41,21 @@ export class DocumentActiveContainer extends React.Component {
   handleChange(event) {
     if(event.target) {
       let {name, value} = event.target
-      // let update = {
-      //   _id: this.props.match.params[0],
-      //   [name]: value,
-      // }
-      // this.props.documentUpdate(update)
-      this.setState({ [name]: value })
+      let update = {
+        _id: this.props.match.params[0],
+        [name]: value,
+      }
+      this.props.documentUpdate(update)
+      // this.setState({ [name]: value })
     } else{
-      // let update = {
-      //   _id: this.props.match.params[0],
-      //   body: event,
-      // }
-      // this.props.documentUpdate(update)
-      this.setState({ body: event })
+      let update = {
+        _id: this.props.match.params[0],
+        body: event,
+      }
+      this.props.documentUpdate(update)
+      // this.setState({ body: event })
     }
-    this.handleSave()
+    // this.handleSave()
   }
 
   handleVoiceResults(final, temp) {
@@ -76,33 +76,33 @@ export class DocumentActiveContainer extends React.Component {
     this.handleSave()
   }
 
-  handleSpeak(settings) {
-    // let synth = window.speechSynthesis
+  // handleSpeak(settings) {
+  // let synth = window.speechSynthesis
 
-    let speech = new SpeechSynthesisUtterance(this.state.body)
+  // let speech = new SpeechSynthesisUtterance(this.state.body)
 
-    // util.log('synth', synth)
-    util.log('speech', speech)
+  // util.log('synth', synth)
+  // util.log('speech', speech)
+  //
+  // speech.volume = 1
+  // speech.rate = 1
+  // speech.pitch = 1
 
-    speech.volume = 1
-    speech.rate = 1
-    speech.pitch = 1
+  // if(settings.lang)
+  //   speech.lang = settings.lang
+  // if(settings.volume)
+  //   speech.volume = settings.volume
+  // if(settings.voice)
+  //   speech.voice = settings.voice
+  // if(settings.pitch)
+  //   speech.pitch = settings.pitch
+  // if(settings.rate)
+  //   speech.rate = settings.rate
 
-    // if(settings.lang)
-    //   speech.lang = settings.lang
-    // if(settings.volume)
-    //   speech.volume = settings.volume
-    // if(settings.voice)
-    //   speech.voice = settings.voice
-    // if(settings.pitch)
-    //   speech.pitch = settings.pitch
-    // if(settings.rate)
-    //   speech.rate = settings.rate
+  // window.speechSynthesis.speak(speech)
 
-    window.speechSynthesis.speak(speech)
-
-    // util.log('synth after', synth)
-  }
+  // util.log('synth after', synth)
+  // }
 
   shouldComponentUpdate(nextProps){
     if(nextProps.temp == this.state.temp)
@@ -117,7 +117,7 @@ export class DocumentActiveContainer extends React.Component {
     util.log('url param:', id)
     this.props.documentFetchOne(id)
       .then(doc => {
-        this.setState({...doc.body})
+        // this.setState({...doc.body})
       })
   }
 
@@ -127,20 +127,20 @@ export class DocumentActiveContainer extends React.Component {
       <div className='document-active-container'>
         <h4>Your document will auto-save on any change to it.</h4>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
-        <SpeakToMe speak={this.handleSpeak} />
+        {/* <SpeakToMe speak={this.handleSpeak} /> */}
         <form name='active-doc'>
           <input
             name='title'
             type='text'
             placeholder='Title'
-            value={this.state.title}
+            value={this.props.edit ? this.props.edit.title : (this.props.document ? this.props.document.title : '')}
             onChange={this.handleChange}
           />
           <input
             name='description'
             type='text'
             placeholder='Description'
-            value={this.state.description}
+            value={this.props.edit ? this.props.edit.description : (this.props.document ? this.props.document.description : '')}
             onChange={this.handleChange}
           />
           <AceEditor
@@ -152,7 +152,7 @@ export class DocumentActiveContainer extends React.Component {
             fontSize='16px'
             wrapEnabled={true}
             placeholder='Document body'
-            value={this.state.body}
+            value={this.props.edit ? this.props.edit.body : (this.props.document ? this.props.document.body : '')}
             onChange={this.handleChange}
             showGutter={false}
             showPrintMargin={false}
@@ -167,13 +167,13 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  // latestEdit: state.edit,
+  edit: state.edit,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
-  // documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
+  // documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
+  documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
