@@ -29,6 +29,7 @@ export class App extends React.Component {
           <main>
             <HeaderContainer />
             <Route exact path='/' component={AuthContainer} />
+            <Route exact path='/register' component={AuthContainer} />
             <Route exact path='/landing' component={DocumentLandingContainer} />
             <Route exact path='/document/*' component={DocumentActiveContainer} />
           </main>
