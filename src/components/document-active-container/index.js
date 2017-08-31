@@ -7,7 +7,6 @@ import 'brace/theme/monokai'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
-import * as edit from '../../actions/edit-actions.js'
 
 import VoiceRecognitionContainer from '../voice-recognition-container'
 
@@ -84,14 +83,14 @@ export class DocumentActiveContainer extends React.Component {
             name='title'
             type='text'
             placeholder='Title'
-            value={this.props.latestEdit.title}
+            value={this.state.title}
             onChange={this.handleChange}
           />
           <input
             name='description'
             type='text'
             placeholder='Description'
-            value={this.props.latestEdit.description}
+            value={this.state.description}
             onChange={this.handleChange}
           />
           <AceEditor
@@ -103,7 +102,7 @@ export class DocumentActiveContainer extends React.Component {
             fontSize='16px'
             wrapEnabled={true}
             placeholder='Document body'
-            value={this.props.latestEdit.body}
+            value={this.state.body}
             onChange={this.handleChange}
             showGutter={false}
             showPrintMargin={false}
@@ -118,12 +117,11 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  latestEdit: state.edit,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
-  documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
+  documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)
