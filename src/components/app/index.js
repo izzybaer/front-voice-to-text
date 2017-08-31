@@ -5,6 +5,7 @@ import {BrowserRouter, Link, Route} from 'react-router-dom'
 import * as util from '../../lib/util.js'
 
 import HeaderContainer from '../header-container'
+import AuthContainer from '../auth-container'
 import DocumentLandingContainer from '../document-landing-container'
 import DocumentActiveContainer from '../document-active-container'
 
@@ -20,7 +21,8 @@ export class App extends React.Component {
         <BrowserRouter>
           <main>
             <HeaderContainer />
-            <Route exact path='/' component={DocumentLandingContainer} />
+            <Route exact path='/' component={AuthContainer} />
+            <Route exact path='/landing' component={DocumentLandingContainer} />
             <Route exact path='/document/*' component={DocumentActiveContainer} />
           </main>
         </BrowserRouter>

@@ -2,7 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import superagent from 'superagent'
 
-
 import * as util from '../../lib/util.js'
 
 export class VoiceRecognitionContainer extends React.Component {
@@ -44,7 +43,7 @@ export class VoiceRecognitionContainer extends React.Component {
       this.setState({ tempTranscript: '', finalTranscript: '' })
       if(typeof(event.results) == 'undefined') {
         this.state.recognition.stop()
-        // upgrade your browser
+        // update your browser
         return
       }
 
@@ -72,15 +71,12 @@ export class VoiceRecognitionContainer extends React.Component {
           //   })
         } else {
           this.setState(state => ({tempTranscript: state.tempTranscript += event.results[i][0].transcript}))
-
           this.handleResults(this.state.finalTranscript, this.state.tempTranscript)
         }
       }
 
       // comment next out if api is enabled
       this.setState(state => ({finalTranscript: this.capitalize(state.finalTranscript)}))
-      // final_span.innerHTML = linebreak(final_transcript)
-      // interim_span.innerHTML = linebreak(interim_transcript)
 
     }
 
