@@ -7,7 +7,6 @@ import 'brace/theme/monokai'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
-import * as edit from '../../actions/edit-actions.js'
 
 import VoiceRecognitionContainer from '../voice-recognition-container'
 
@@ -136,13 +135,11 @@ export class DocumentActiveContainer extends React.Component {
 
 export const mapStateToProps = state => ({
   document: state.document[0],
-  // latestEdit: state.edit,
 })
 
 export const mapDispatchToProps = dispatch => ({
   documentFetchOne: id => dispatch(document.documentFetchOneRequest(id)),
   documentUpdate: newDoc => dispatch(document.documentUpdateRequest(newDoc)),
-  // documentUpdate: newDoc => dispatch(edit.edit(newDoc)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentActiveContainer)

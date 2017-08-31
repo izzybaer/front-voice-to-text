@@ -7,7 +7,7 @@ import App from './components/app'
 import storeCreate from './lib/store-create.js'
 import io from './lib/io.js'
 
-import editSubscribers from './subscribers/edit.js'
+// import editSubscribers from './subscribers/edit.js'
 
 const store = storeCreate()
 
