@@ -1,0 +1,89 @@
+import React from 'react'
+import {connect} from 'react-redux'
+import {Redirect, Link} from 'react-router-dom'
+
+import * as util from '../../lib/util.js'
+import * as auth from '../../actions/auth-actions.js'
+
+export class AuthContainer extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      displayName: '',
+      username: '',
+      password: '',
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
+    this.handleRegister = this.handleRegister.bind(this)
+  }
+
+  handleChange(event) {
+    let {name, value} = event.target
+    this.setState({ [name]: value })
+  }
+
+  handleLogin(event) {
+    event.preventDefault()
+    this.props.login(this.state)
+  }
+
+  handleRegister(event) {
+    event.preventDefault()
+    this.props.register(this.state)
+  }
+
+  render() {
+    let method = this.props.match.path
+    return (
+      <div className='auth-container'>
+        {this.props.token
+          ? <Redirect to='/landing' />
+          : undefined
+        }
+        <Link to='/'>Login</Link>
+        <Link to='/register'>Register</Link>
+        <form onSubmit={method === '/register' ? this.handleRegister : this.handleLogin}>
+          <input
+            name='username'
+            type='text'
+            placeholder='Username'
+            onChange={this.handleChange}
+          />
+          {method === '/register'
+            ? <input
+              name='displayName'
+              type='text'
+              placeholder='Display Name'
+              onChange={this.handleChange}
+            />
+            : undefined}
+          <input
+            name='password'
+            type='password'
+            placeholder='Password'
+            onChange={this.handleChange}
+          />
+          <button
+            name='auth-button'
+            type='submit'
+          >
+            {method === '/register' ? 'Register' : 'Login'}
+          </button>
+        </form>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  token: state.token,
+})
+
+const mapDispatchToProps = dispatch => ({
+  login: token => dispatch(auth.loginRequest(token)),
+  register: token => dispatch(auth.registerRequest(token)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthContainer)

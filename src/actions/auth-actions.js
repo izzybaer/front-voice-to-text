@@ -1,0 +1,40 @@
+import superagent from 'superagent'
+import * as util from '../lib/util.js'
+
+export const tokenSet = token => ({
+  type: 'TOKEN_SET',
+  payload: token,
+})
+
+export const logout = () => {
+  util.cookieDelete('X-VtT-Token')
+  return { type: 'USER_LOGOUT' }
+}
+
+export const loginRequest = credentials => dispatch =>
+  superagent.get(`${__API_URL__}/auth`)
+    .withCredentials()
+    .auth(credentials.username, credentials.password)
+    .then(res => {
+      util.log('loginRequest', res.text)
+      if(res.text) {
+        util.cookieCreate('X-VtT-Token', res.text, 2)
+        dispatch(tokenSet(res.text))
+      }
+      return res
+    })
+    .catch(err => util.logError('loginRequest', err))
+
+export const registerRequest = credentials => dispatch =>
+  superagent.post(`${__API_URL__}/auth`)
+    .withCredentials()
+    .send(credentials)
+    .then(res => {
+      util.log('registerRequest', res.text)
+      if(res.text) {
+        util.cookieCreate('X-VtT-Token', res.text, 2)
+        dispatch(tokenSet(res.text))
+      }
+      return res
+    })
+    .catch(err => util.logError('registerRequest', err))

@@ -38,18 +38,8 @@ export class DocumentActiveContainer extends React.Component {
   handleChange(event) {
     if(event.target) {
       let {name, value} = event.target
-      // let update = {
-      //   _id: this.props.match.params[0],
-      //   [name]: value,
-      // }
-      // this.props.documentUpdate(update)
       this.setState({ [name]: value })
     } else{
-      // let update = {
-      //   _id: this.props.match.params[0],
-      //   body: event,
-      // }
-      // this.props.documentUpdate(update)
       this.setState({ body: event })
     }
     this.handleSave()
@@ -58,13 +48,6 @@ export class DocumentActiveContainer extends React.Component {
   handleVoiceResults(final, temp) {
     util.log('final', final)
     util.log('temp', temp)
-
-    // let update = {
-    //   body: `${this.props.latestEdit.body}${final}`,
-    // }
-    // this.props.documentUpdate(update)
-    //
-    // this.setState({ temp })
 
     this.setState({
       body: `${this.state.body}${final}`,
@@ -91,7 +74,7 @@ export class DocumentActiveContainer extends React.Component {
   }
 
   render() {
-    // util.log('props', this.state)
+    util.log('props', this.state)
     return (
       <div className='document-active-container'>
         <h4>Your document will auto-save on any change to it.</h4>
