@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 import * as util from '../../lib/util.js'
 import * as document from '../../actions/document-actions.js'
@@ -27,6 +28,10 @@ export class DocumentLandingContainer extends React.Component {
   render() {
     return (
       <div className='document-landing-container'>
+        {!this.props.token
+          ? <Redirect to='/' />
+          : undefined
+        }
         <DocumentCreateForm handleComplete={this.handleDocumentCreate} />
         <DocumentBrowseContainer />
       </div>
