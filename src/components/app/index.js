@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {BrowserRouter, Link, Route} from 'react-router-dom'
+import {Redirect, BrowserRouter, Link, Route} from 'react-router-dom'
 
 import * as util from '../../lib/util.js'
 import * as auth from '../../actions/auth-actions.js'
@@ -27,6 +27,10 @@ export class App extends React.Component {
       <div className='app'>
         <BrowserRouter>
           <main>
+            {!this.props.token
+              ? <Redirect to='/' />
+              : undefined
+            }
             <HeaderContainer />
             <Route exact path='/' component={AuthContainer} />
             <Route exact path='/register' component={AuthContainer} />

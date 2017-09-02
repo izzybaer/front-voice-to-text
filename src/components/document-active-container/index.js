@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import brace from 'brace'
 import AceEditor from 'react-ace'
+import {Redirect} from 'react-router-dom'
 
 import 'brace/theme/monokai'
 
@@ -77,6 +78,10 @@ export class DocumentActiveContainer extends React.Component {
     util.log('props', this.state)
     return (
       <div className='document-active-container'>
+        {!this.props.token
+          ? <Redirect to='/' />
+          : undefined
+        }
         <h4>Your document will auto-save on any change to it.</h4>
         <VoiceRecognitionContainer handleVoiceResults={this.handleVoiceResults} />
         <form name='active-doc'>
