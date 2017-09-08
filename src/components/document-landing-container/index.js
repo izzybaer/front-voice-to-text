@@ -40,7 +40,7 @@ export class DocumentLandingContainer extends React.Component {
 }
 
 export const mapStateToProps = state => ({
-
+  token: state.token,
 })
 
 export const mapDispatchToProps = dispatch => ({

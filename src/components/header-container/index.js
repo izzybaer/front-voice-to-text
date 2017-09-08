@@ -24,6 +24,9 @@ export class HeaderContainer extends React.Component {
         <h1>Voice To Text</h1>
         <Link to='/'>Home</Link>
         {this.props.token
+          ? <Link to='/changePass'>Change Password</Link>
+          : undefined}
+        {this.props.token
           ? <Link to='' onClick={this.handleLogout}>Logout</Link>
           : undefined}
       </header>
@@ -32,7 +35,7 @@ export class HeaderContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-
+  token: state.token,
 })
 
 const mapDispatchToProps = dispatch => ({

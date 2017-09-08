@@ -9,6 +9,7 @@ import HeaderContainer from '../header-container'
 import AuthContainer from '../auth-container'
 import DocumentLandingContainer from '../document-landing-container'
 import DocumentActiveContainer from '../document-active-container'
+import PasswordChange from '../password-change'
 
 export class App extends React.Component {
   constructor(props) {
@@ -36,6 +37,7 @@ export class App extends React.Component {
             <Route exact path='/register' component={AuthContainer} />
             <Route exact path='/landing' component={DocumentLandingContainer} />
             <Route exact path='/document/*' component={DocumentActiveContainer} />
+            <Route exact path='/changePass' component={PasswordChange} />
           </main>
         </BrowserRouter>
       </div>

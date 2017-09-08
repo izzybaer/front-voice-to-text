@@ -17,14 +17,17 @@ export class DocumentBrowseContainer extends React.Component {
     this.props.documentsFetchAll()
   }
 
-  componentWillUpdate() {
-    this.props.document.length > 1
-      ? this.props.documentsFetchAll()
-      : undefined
-  }
+  // componentWillUpdate() {
+  //   this.props.document.length > 1
+  //     ? this.props.documentsFetchAll()
+  //     : undefined
+  // }
 
   handleDelete(id) {
     this.props.documentDelete(id)
+      .then(() => {
+        this.props.documentsFetchAll()
+      })
   }
 
   render() {
@@ -48,6 +51,7 @@ export class DocumentBrowseContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.token,
   document: state.document,
 })
 
