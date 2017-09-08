@@ -13,11 +13,13 @@ export class AuthContainer extends React.Component {
       username: '',
       password: '',
       errorMsg: '',
+      rememberUsername: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.handleRegister = this.handleRegister.bind(this)
+    this.handleRemember = this.handleRemember.bind(this)
   }
 
   handleChange(event) {
@@ -27,6 +29,9 @@ export class AuthContainer extends React.Component {
 
   handleLogin(event) {
     event.preventDefault()
+    if(this.state.rememberUsername) {
+      util.cookieCreate('X-Username', this.state.username)
+    }
     this.props.login(this.state)
   }
 
@@ -39,6 +44,10 @@ export class AuthContainer extends React.Component {
     }
 
     this.props.register(this.state)
+  }
+
+  handleRemember(event) {
+    util.log(event.target.children.rememberUsername.checked)
   }
 
   render() {
@@ -72,6 +81,14 @@ export class AuthContainer extends React.Component {
             placeholder='Password'
             onChange={this.handleChange}
           />
+          <label htmlFor='rememberUsername' onClick={this.handleRemember}>
+            <input
+              name='rememberUsername'
+              type='checkbox'
+              onChange={() => this.setState({ rememberUsername: !this.state.rememberUsername })}
+            />
+            Remember Username
+          </label>
           {method === '/register' ? <p>Passwords must be at least 8 characters long</p> : undefined}
           {this.state.errorMsg ? <p className='error-message'>Error: {this.state.errorMsg}</p> : undefined}
           <button
