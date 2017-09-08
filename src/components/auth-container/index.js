@@ -47,7 +47,9 @@ export class AuthContainer extends React.Component {
   }
 
   handleRemember(event) {
-    util.log(event.target.children.rememberUsername.checked)
+    let rememberUsername = event.target.children.rememberUsername
+    if(rememberUsername)
+      rememberUsername.checked = !rememberUsername.checked
   }
 
   render() {
@@ -81,7 +83,7 @@ export class AuthContainer extends React.Component {
             placeholder='Password'
             onChange={this.handleChange}
           />
-          <label htmlFor='rememberUsername' onClick={this.handleRemember}>
+          <label className='check-box-wrapper' htmlFor='rememberUsername' onClick={this.handleRemember}>
             <input
               name='rememberUsername'
               type='checkbox'
