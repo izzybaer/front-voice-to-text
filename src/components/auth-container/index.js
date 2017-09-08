@@ -22,6 +22,10 @@ export class AuthContainer extends React.Component {
     this.handleRemember = this.handleRemember.bind(this)
   }
 
+  componentWillMount() {
+
+  }
+
   handleChange(event) {
     let {name, value} = event.target
     this.setState({ [name]: value })
@@ -29,9 +33,8 @@ export class AuthContainer extends React.Component {
 
   handleLogin(event) {
     event.preventDefault()
-    if(this.state.rememberUsername) {
+    if(this.state.rememberUsername && !util.cookieFetch('X-Username'))
       util.cookieCreate('X-Username', this.state.username)
-    }
     this.props.login(this.state)
   }
 
@@ -47,12 +50,18 @@ export class AuthContainer extends React.Component {
   }
 
   handleRemember(event) {
-    let rememberUsername = event.target.children.rememberUsername
-    if(rememberUsername)
-      rememberUsername.checked = !rememberUsername.checked
+    event.preventDefault()
+    this.setState({ rememberUsername: !this.state.rememberUsername })
   }
 
   render() {
+    let rememberedUser = util.cookieFetch('X-Username')
+    util.log(rememberedUser)
+    if(rememberedUser && this.state.username === '') {
+      util.log('inside')
+      this.setState({ username: rememberedUser, rememberUsername: true })
+    }
+    util.log('will mount')
     let method = this.props.match.path
     return (
       <div className='auth-container'>
@@ -68,6 +77,7 @@ export class AuthContainer extends React.Component {
             type='text'
             placeholder='Username'
             onChange={this.handleChange}
+            value={this.state.username}
           />
           {method === '/register'
             ? <input
@@ -75,6 +85,7 @@ export class AuthContainer extends React.Component {
               type='text'
               placeholder='Display Name'
               onChange={this.handleChange}
+              value={this.state.displayName}
             />
             : undefined}
           <input
@@ -82,12 +93,13 @@ export class AuthContainer extends React.Component {
             type='password'
             placeholder='Password'
             onChange={this.handleChange}
+            value={this.state.password}
           />
           <label className='check-box-wrapper' htmlFor='rememberUsername' onClick={this.handleRemember}>
             <input
               name='rememberUsername'
               type='checkbox'
-              onChange={() => this.setState({ rememberUsername: !this.state.rememberUsername })}
+              checked={this.state.rememberUsername}
             />
             Remember Username
           </label>

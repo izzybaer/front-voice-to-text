@@ -20,12 +20,14 @@ export const cookieCreate = (name, value, days) => {
 }
 
 export const cookieFetch = (key) => {
-  let cookies = {...document.cookie.split(';')
+  let allCookies = Object.assign({}, ...document.cookie.split(';')
     .map(cookie => {
       let [key, value] = cookie.split('=')
+      log(key.trim())
       return {[key.trim()]: value}
-    })}
-  return cookies[key]
+    }))
+  log(allCookies)
+  return allCookies[key]
 }
 
 export const cookieDelete = (key) => {
