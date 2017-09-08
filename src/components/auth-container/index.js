@@ -23,7 +23,13 @@ export class AuthContainer extends React.Component {
   }
 
   componentWillMount() {
-
+    let rememberedUser = util.cookieFetch('X-Username')
+    util.log(rememberedUser)
+    if(rememberedUser && this.state.username === '') {
+      util.log('inside')
+      this.setState({ username: rememberedUser, rememberUsername: true })
+    }
+    util.log('will mount')
   }
 
   handleChange(event) {
@@ -35,6 +41,8 @@ export class AuthContainer extends React.Component {
     event.preventDefault()
     if(this.state.rememberUsername && !util.cookieFetch('X-Username'))
       util.cookieCreate('X-Username', this.state.username)
+    if(!this.state.rememberUsername && util.cookieFetch('X-Username'))
+      util.cookieDelete('X-Username')
     this.props.login(this.state)
   }
 
@@ -50,18 +58,10 @@ export class AuthContainer extends React.Component {
   }
 
   handleRemember(event) {
-    event.preventDefault()
     this.setState({ rememberUsername: !this.state.rememberUsername })
   }
 
   render() {
-    let rememberedUser = util.cookieFetch('X-Username')
-    util.log(rememberedUser)
-    if(rememberedUser && this.state.username === '') {
-      util.log('inside')
-      this.setState({ username: rememberedUser, rememberUsername: true })
-    }
-    util.log('will mount')
     let method = this.props.match.path
     return (
       <div className='auth-container'>
@@ -95,12 +95,15 @@ export class AuthContainer extends React.Component {
             onChange={this.handleChange}
             value={this.state.password}
           />
-          <label className='check-box-wrapper' htmlFor='rememberUsername' onClick={this.handleRemember}>
-            <input
-              name='rememberUsername'
-              type='checkbox'
-              checked={this.state.rememberUsername}
-            />
+          <input
+            id='rememberUsername'
+            name='rememberUsername'
+            type='checkbox'
+            onChange={this.handleRemember}
+            checked={this.state.rememberUsername}
+            value='asdasds'
+          />
+          <label className='check-box-wrapper' htmlFor='rememberUsername'>
             Remember Username
           </label>
           {method === '/register' ? <p>Passwords must be at least 8 characters long</p> : undefined}
