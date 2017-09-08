@@ -39,9 +39,10 @@ export const registerRequest = credentials => dispatch =>
     })
     .catch(err => util.logError('registerRequest', err))
 
-export const passwordChangeRequest = (oldPassword, newPassword) => dispatch =>
-  superagent.post(`${__API_URL__}/newPass`)
-    .withCredentials()
+export const passwordChangeRequest = (oldPassword, newPassword) => (dispatch, getState) => {
+  let {token} = getState()
+  return superagent.post(`${__API_URL__}/newPass`)
+    .set('Authorization', `Bearer ${token}`)
     .send({
       oldPassword,
       newPassword,
@@ -51,3 +52,4 @@ export const passwordChangeRequest = (oldPassword, newPassword) => dispatch =>
       return res
     })
     .catch(err => util.logError('passwordChangeRequest', err))
+}
