@@ -48,7 +48,6 @@ export const passwordChangeRequest = (oldPassword, newPassword) => dispatch =>
     })
     .then(res => {
       util.log('passwordChangeRequest', res.text)
-
       return res
     })
     .catch(err => util.logError('passwordChangeRequest', err))

@@ -11,6 +11,7 @@ export class PasswordChange extends React.Component {
       oldPassword: '',
       newPassword1: '',
       newPassword2: '',
+      errorMsg: '',
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -27,6 +28,24 @@ export class PasswordChange extends React.Component {
   handlePassChange(event) {
     event.preventDefault()
 
+    if(!this.state.oldPassword || !this.state.newPassword1 || !this.state.newPassword2) {
+      this.setState({ errorMsg: 'All fields are required' })
+      return
+    }
+    if(this.state.newPassword1.length < 8) {
+      this.setState({ errorMsg: 'Passwords must be at least 8 characters long' })
+      return
+    }
+    if(this.state.newPassword1 !== this.state.newPassword2) {
+      this.setState({ errorMsg: 'Passwords don\'t match' })
+      return
+    }
+
+    this.props.passwordChange(this.state.oldPassword, this.state.newPassword1)
+      .then(res => {
+        util.log('passchange res', res)
+      })
+      .catch(err => util.logError('passwordChange errr', err))
   }
 
   render() {
@@ -38,6 +57,7 @@ export class PasswordChange extends React.Component {
           placeholder='Current Password'
           onChange={this.handleChange}
           value={this.state.oldPassword}
+          required
         />
         <input
           name='new-password-1'
@@ -45,6 +65,7 @@ export class PasswordChange extends React.Component {
           placeholder='New Password'
           onChange={this.handleChange}
           value={this.state.newPassword1}
+          required
         />
         <input
           name='new-password-2'
@@ -52,6 +73,7 @@ export class PasswordChange extends React.Component {
           placeholder='New Password (Again)'
           onChange={this.handleChange}
           value={this.state.newPassword2}
+          required
         />
         <button
           name='submit-new-pass'
