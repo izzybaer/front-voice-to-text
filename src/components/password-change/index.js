@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 import * as util from '../../lib/util.js'
 import * as auth from '../../actions/auth-actions.js'
@@ -29,15 +30,15 @@ export class PasswordChange extends React.Component {
     event.preventDefault()
 
     if(!this.state.oldPassword || !this.state.newPassword1 || !this.state.newPassword2) {
-      this.setState({ errorMsg: 'All fields are required' })
+      this.setState({ errorMsg: 'All fields are required', oldPassword: '', newPassword1: '', newPassword2: '' })
       return
     }
     if(this.state.newPassword1.length < 8) {
-      this.setState({ errorMsg: 'Passwords must be at least 8 characters long' })
+      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', oldPassword: '', newPassword1: '', newPassword2: '' })
       return
     }
     if(this.state.newPassword1 !== this.state.newPassword2) {
-      this.setState({ errorMsg: 'Passwords don\'t match' })
+      this.setState({ errorMsg: 'Passwords don\'t match', oldPassword: '', newPassword1: '', newPassword2: '' })
       return
     }
 
@@ -51,6 +52,10 @@ export class PasswordChange extends React.Component {
   render() {
     return (
       <form className='password-change' onSubmit={this.handlePassChange}>
+        {!this.props.token
+          ? <Redirect to='/' />
+          : undefined
+        }
         <input
           name='old-password'
           type='password'
@@ -75,6 +80,7 @@ export class PasswordChange extends React.Component {
           value={this.state.newPassword2}
           required
         />
+        {this.state.errorMsg ? <p className='error-message'>Error: {this.state.errorMsg}</p> : undefined}
         <button
           name='submit-new-pass'
           type='submit'

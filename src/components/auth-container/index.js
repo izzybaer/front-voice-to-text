@@ -12,6 +12,7 @@ export class AuthContainer extends React.Component {
       displayName: '',
       username: '',
       password: '',
+      errorMsg: '',
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -31,6 +32,12 @@ export class AuthContainer extends React.Component {
 
   handleRegister(event) {
     event.preventDefault()
+
+    if(this.state.password.length < 8) {
+      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', oldPassword: '', newPassword1: '', newPassword2: '' })
+      return
+    }
+
     this.props.register(this.state)
   }
 
@@ -65,6 +72,8 @@ export class AuthContainer extends React.Component {
             placeholder='Password'
             onChange={this.handleChange}
           />
+          {method === '/register' ? <p>Passwords must be at least 8 characters long</p> : undefined}
+          {this.state.errorMsg ? <p className='error-message'>Error: {this.state.errorMsg}</p> : undefined}
           <button
             name='auth-button'
             type='submit'
