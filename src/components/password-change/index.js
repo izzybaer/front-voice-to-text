@@ -1,4 +1,8 @@
 import React from 'react'
+import {connect} from 'react-redux'
+
+import * as util from '../../lib/util.js'
+import * as auth from '../../actions/auth-actions.js'
 
 export class PasswordChange extends React.Component {
   constructor(props) {
@@ -22,7 +26,7 @@ export class PasswordChange extends React.Component {
 
   handlePassChange(event) {
     event.preventDefault()
-    
+
   }
 
   render() {
@@ -57,3 +61,13 @@ export class PasswordChange extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+
+})
+
+const mapDispatchToProps = dispatch => ({
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PasswordChange)

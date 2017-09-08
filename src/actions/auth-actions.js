@@ -38,3 +38,17 @@ export const registerRequest = credentials => dispatch =>
       return res
     })
     .catch(err => util.logError('registerRequest', err))
+
+export const passwordChangeRequest = (oldPassword, newPassword) => dispatch =>
+  superagent.post(`${__API_URL__}/newPass`)
+    .withCredentials()
+    .send({
+      oldPassword,
+      newPassword,
+    })
+    .then(res => {
+      util.log('passwordChangeRequest', res.text)
+
+      return res
+    })
+    .catch(err => util.logError('passwordChangeRequest', err))
