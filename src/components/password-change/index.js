@@ -90,11 +90,11 @@ export class PasswordChange extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+export const mapStateToProps = state => ({
   token: state.token,
 })
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   passwordChange: (oldPassword, newPassword) => dispatch(auth.passwordChangeRequest(oldPassword, newPassword)),
 })
 
