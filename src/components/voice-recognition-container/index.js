@@ -134,7 +134,7 @@ export class VoiceRecognitionContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-
+  token: state.token,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -48,6 +48,7 @@ export class DocumentBrowseContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.token,
   document: state.document,
 })
 

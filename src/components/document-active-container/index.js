@@ -122,6 +122,7 @@ export class DocumentActiveContainer extends React.Component {
 }
 
 export const mapStateToProps = state => ({
+  token: state.token,
   document: state.document[0],
 })
 

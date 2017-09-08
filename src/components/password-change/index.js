@@ -57,7 +57,7 @@ export class PasswordChange extends React.Component {
           : undefined
         }
         <input
-          name='old-password'
+          name='oldPassword'
           type='password'
           placeholder='Current Password'
           onChange={this.handleChange}
@@ -65,7 +65,7 @@ export class PasswordChange extends React.Component {
           required
         />
         <input
-          name='new-password-1'
+          name='newPassword1'
           type='password'
           placeholder='New Password'
           onChange={this.handleChange}
@@ -73,7 +73,7 @@ export class PasswordChange extends React.Component {
           required
         />
         <input
-          name='new-password-2'
+          name='newPassword2'
           type='password'
           placeholder='New Password (Again)'
           onChange={this.handleChange}
