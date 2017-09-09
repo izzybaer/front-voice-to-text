@@ -12,33 +12,81 @@ export class AuthContainer extends React.Component {
       displayName: '',
       username: '',
       password: '',
+      password2: '',
       errorMsg: '',
+      rememberUsername: false,
+      displayNameTest: false,
+      passwordLengthTest: false,
+      passwordMatchTest: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.handleRegister = this.handleRegister.bind(this)
+    this.handleRemember = this.handleRemember.bind(this)
+  }
+
+  componentWillMount() {
+    let rememberedUser = util.cookieFetch('X-Username')
+    util.log(rememberedUser)
+    if(rememberedUser && this.state.username === '' && this.props.match.path !== '/register') {
+      util.log('inside')
+      this.setState({ username: rememberedUser, rememberUsername: true })
+    }
+    util.log('will mount')
   }
 
   handleChange(event) {
     let {name, value} = event.target
     this.setState({ [name]: value })
+
+    new RegExp('^[\\w]+$').test(this.state.displayName)
+      ? this.setState({ displayNameTest: true })
+      : this.setState({ displayNameTest: false })
+    this.state.password.length < 8
+      ? this.setState({ passwordLengthTest: false })
+      : this.setState({ passwordLengthTest: true })
+    this.state.password === this.state.password2
+      ? this.setState({ passwordMatchTest: true })
+      : this.setState({ passwordMatchTest: false })
   }
 
   handleLogin(event) {
     event.preventDefault()
+
+    if(!this.state.username || !this.state.password)
+      return
+
+    if(this.state.rememberUsername && !util.cookieFetch('X-Username'))
+      util.cookieCreate('X-Username', this.state.username)
+    if(!this.state.rememberUsername && util.cookieFetch('X-Username'))
+      util.cookieDelete('X-Username')
     this.props.login(this.state)
   }
 
   handleRegister(event) {
     event.preventDefault()
 
+    if(!this.state.username || !this.state.displayName || !this.state.password || !this.state.password2)
+      return
+    if(!/^[\w]+$/.test(this.state.displayName)) {
+      this.setState({ displayNameTest: false })
+      return
+    }
     if(this.state.password.length < 8) {
-      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', oldPassword: '', newPassword1: '', newPassword2: '' })
+      this.setState({ passwordLengthTest: false })
+      return
+    }
+    if(this.state.password !== this.state.password2) {
+      this.setState({ passwordMatchTest: false })
       return
     }
 
     this.props.register(this.state)
+  }
+
+  handleRemember(event) {
+    this.setState({ rememberUsername: !this.state.rememberUsername })
   }
 
   render() {
@@ -57,6 +105,8 @@ export class AuthContainer extends React.Component {
             type='text'
             placeholder='Username'
             onChange={this.handleChange}
+            value={this.state.username}
+            required
           />
           {method === '/register'
             ? <input
@@ -64,6 +114,8 @@ export class AuthContainer extends React.Component {
               type='text'
               placeholder='Display Name'
               onChange={this.handleChange}
+              value={this.state.displayName}
+              required
             />
             : undefined}
           <input
@@ -71,9 +123,56 @@ export class AuthContainer extends React.Component {
             type='password'
             placeholder='Password'
             onChange={this.handleChange}
+            value={this.state.password}
+            required
           />
-          {method === '/register' ? <p>Passwords must be at least 8 characters long</p> : undefined}
-          {this.state.errorMsg ? <p className='error-message'>Error: {this.state.errorMsg}</p> : undefined}
+          {method === '/register'
+            ? <input
+              name='password2'
+              type='password'
+              placeholder={'Password (again)'}
+              onChange={this.handleChange}
+              value={this.state.password2}
+              required
+            />
+            : undefined
+          }
+          {method !== '/register'
+            ? <span>
+              <input
+                id='rememberUsername'
+                name='rememberUsername'
+                type='checkbox'
+                onChange={this.handleRemember}
+                checked={this.state.rememberUsername}
+                value='asdasds'
+              />
+              <label className='check-box-wrapper' htmlFor='rememberUsername'>
+                Remember Username
+              </label>
+            </span>
+            : undefined}
+          {method !== '/register'
+            ? <p className={this.state.username && this.state.password ? 'pass-message' : 'error-message'}>
+                All fields are required
+            </p>
+            : undefined}
+          {method === '/register'
+            ? <div className='account-rules'>
+              <p className={this.state.username && this.state.displayName && this.state.password && this.state.password2 ? 'pass-message' : 'error-message'}>
+                All fields are required
+              </p>
+              <p className={this.state.displayNameTest ? 'pass-message' : 'error-message'}>
+                Display Name can only contain word characters (a-z, A-Z, 0-9, _)
+              </p>
+              <p className={this.state.passwordLengthTest ? 'pass-message' : 'error-message'}>
+                Passwords must be at least 8 characters long
+              </p>
+              <p className={this.state.passwordMatchTest ? 'pass-message' : 'error-message'}>
+                Passwords must be the same
+              </p>
+            </div>
+            : undefined}
           <button
             name='auth-button'
             type='submit'
