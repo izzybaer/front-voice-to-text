@@ -11,12 +11,13 @@ export class AuthContainer extends React.Component {
     this.state = {
       displayName: '',
       username: '',
-      password1: '',
+      password: '',
+      password2: '',
       errorMsg: '',
       rememberUsername: false,
       displayNameTest: false,
       passwordLengthTest: false,
-      passwordMatchTest: true,
+      passwordMatchTest: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -38,17 +39,22 @@ export class AuthContainer extends React.Component {
   handleChange(event) {
     let {name, value} = event.target
     this.setState({ [name]: value })
-    if(/^[\w]+$/.test(this.state.displayName))
-      this.setState({ displayNameTest: true })
-    else
-      this.setState({ displayNameTest: true })
 
+    new RegExp('^[\\w]+$').test(this.state.displayName)
+      ? this.setState({ displayNameTest: true })
+      : this.setState({ displayNameTest: false })
+    this.state.password.length < 8
+      ? this.setState({ passwordLengthTest: false })
+      : this.setState({ passwordLengthTest: true })
+    this.state.password === this.state.password2
+      ? this.setState({ passwordMatchTest: true })
+      : this.setState({ passwordMatchTest: false })
   }
 
   handleLogin(event) {
     event.preventDefault()
 
-    if(!this.state.username || !this.state.password1)
+    if(!this.state.username || !this.state.password)
       return
 
     if(this.state.rememberUsername && !util.cookieFetch('X-Username'))
@@ -61,17 +67,17 @@ export class AuthContainer extends React.Component {
   handleRegister(event) {
     event.preventDefault()
 
-    if(!this.state.username || !this.state.displayName || !this.state.password1 || !this.state.password2)
+    if(!this.state.username || !this.state.displayName || !this.state.password || !this.state.password2)
       return
     if(!/^[\w]+$/.test(this.state.displayName)) {
       this.setState({ displayNameTest: false })
       return
     }
-    if(this.state.password1.length < 8) {
+    if(this.state.password.length < 8) {
       this.setState({ passwordLengthTest: false })
       return
     }
-    if(this.state.password1 !== this.state.password2) {
+    if(this.state.password !== this.state.password2) {
       this.setState({ passwordMatchTest: false })
       return
     }
@@ -113,11 +119,11 @@ export class AuthContainer extends React.Component {
             />
             : undefined}
           <input
-            name='password1'
+            name='password'
             type='password'
             placeholder='Password'
             onChange={this.handleChange}
-            value={this.state.password1}
+            value={this.state.password}
             required
           />
           {method === '/register'
@@ -147,13 +153,13 @@ export class AuthContainer extends React.Component {
             </span>
             : undefined}
           {method !== '/register'
-            ? <p className={this.state.username && this.state.password1 ? 'pass-message' : 'error-message'}>
+            ? <p className={this.state.username && this.state.password ? 'pass-message' : 'error-message'}>
                 All fields are required
             </p>
             : undefined}
           {method === '/register'
             ? <div className='account-rules'>
-              <p className={this.state.username && this.state.displayName && this.state.password1 && this.state.password2 ? 'pass-message' : 'error-message'}>
+              <p className={this.state.username && this.state.displayName && this.state.password && this.state.password2 ? 'pass-message' : 'error-message'}>
                 All fields are required
               </p>
               <p className={this.state.displayNameTest ? 'pass-message' : 'error-message'}>
