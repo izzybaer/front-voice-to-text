@@ -11,7 +11,7 @@ export class AuthContainer extends React.Component {
     this.state = {
       displayName: '',
       username: '',
-      password: '',
+      password1: '',
       errorMsg: '',
       rememberUsername: false,
     }
@@ -39,6 +39,11 @@ export class AuthContainer extends React.Component {
 
   handleLogin(event) {
     event.preventDefault()
+
+    if(!this.state.username || !this.state.password1) {
+      this.setState({ errorMsg: 'All fields are required', username: '', password1: '', rememberUsername: false })
+    }
+
     if(this.state.rememberUsername && !util.cookieFetch('X-Username'))
       util.cookieCreate('X-Username', this.state.username)
     if(!this.state.rememberUsername && util.cookieFetch('X-Username'))
@@ -49,8 +54,16 @@ export class AuthContainer extends React.Component {
   handleRegister(event) {
     event.preventDefault()
 
-    if(this.state.password.length < 8) {
-      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', oldPassword: '', newPassword1: '', newPassword2: '' })
+    if(!this.state.username || !this.state.displayName || !this.state.password1 || !this.state.password2) {
+      this.setState({ errorMsg: 'All fields are required', username: '', displayName: '', newPassword1: '', newPassword2: '' })
+      return
+    }
+    if(this.state.password1.length < 8) {
+      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', password1: '', password2: '' })
+      return
+    }
+    if(this.state.password1 !== this.state.password2) {
+      this.setState({ errorMsg: 'Passwords don\'t match', password1: '', password2: '' })
       return
     }
 
@@ -78,6 +91,7 @@ export class AuthContainer extends React.Component {
             placeholder='Username'
             onChange={this.handleChange}
             value={this.state.username}
+            required
           />
           {method === '/register'
             ? <input
@@ -86,27 +100,49 @@ export class AuthContainer extends React.Component {
               placeholder='Display Name'
               onChange={this.handleChange}
               value={this.state.displayName}
+              required
             />
             : undefined}
           <input
-            name='password'
+            name='password1'
             type='password'
             placeholder='Password'
             onChange={this.handleChange}
-            value={this.state.password}
+            value={this.state.password1}
+            required
           />
-          <input
-            id='rememberUsername'
-            name='rememberUsername'
-            type='checkbox'
-            onChange={this.handleRemember}
-            checked={this.state.rememberUsername}
-            value='asdasds'
-          />
-          <label className='check-box-wrapper' htmlFor='rememberUsername'>
-            Remember Username
-          </label>
-          {method === '/register' ? <p>Passwords must be at least 8 characters long</p> : undefined}
+          {method === '/register'
+            ? <input
+              name='password2'
+              type='password'
+              placeholder={'Password (again)'}
+              onChange={this.handleChange}
+              value={this.state.password2}
+              required
+            />
+            : undefined
+          }
+          {method !== '/register'
+            ? <span>
+              <input
+                id='rememberUsername'
+                name='rememberUsername'
+                type='checkbox'
+                onChange={this.handleRemember}
+                checked={this.state.rememberUsername}
+                value='asdasds'
+              />
+              <label className='check-box-wrapper' htmlFor='rememberUsername'>
+                Remember Username
+              </label>
+            </span>
+            : undefined}
+          {method === '/register'
+            ? <div className='account-rules'>
+              <p>Display Name can only contain letters (a-z & A-Z) and numbers (0-9)</p>
+              <p>Passwords must be at least 8 characters long</p>
+            </div>
+            : undefined}
           {this.state.errorMsg ? <p className='error-message'>Error: {this.state.errorMsg}</p> : undefined}
           <button
             name='auth-button'
