@@ -14,6 +14,9 @@ export class AuthContainer extends React.Component {
       password1: '',
       errorMsg: '',
       rememberUsername: false,
+      displayNameTest: false,
+      passwordLengthTest: false,
+      passwordMatchTest: true,
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -25,7 +28,7 @@ export class AuthContainer extends React.Component {
   componentWillMount() {
     let rememberedUser = util.cookieFetch('X-Username')
     util.log(rememberedUser)
-    if(rememberedUser && this.state.username === '') {
+    if(rememberedUser && this.state.username === '' && this.props.match.path !== '/register') {
       util.log('inside')
       this.setState({ username: rememberedUser, rememberUsername: true })
     }
@@ -35,14 +38,18 @@ export class AuthContainer extends React.Component {
   handleChange(event) {
     let {name, value} = event.target
     this.setState({ [name]: value })
+    if(/^[\w]+$/.test(this.state.displayName))
+      this.setState({ displayNameTest: true })
+    else
+      this.setState({ displayNameTest: true })
+
   }
 
   handleLogin(event) {
     event.preventDefault()
 
-    if(!this.state.username || !this.state.password1) {
-      this.setState({ errorMsg: 'All fields are required', username: '', password1: '', rememberUsername: false })
-    }
+    if(!this.state.username || !this.state.password1)
+      return
 
     if(this.state.rememberUsername && !util.cookieFetch('X-Username'))
       util.cookieCreate('X-Username', this.state.username)
@@ -54,16 +61,18 @@ export class AuthContainer extends React.Component {
   handleRegister(event) {
     event.preventDefault()
 
-    if(!this.state.username || !this.state.displayName || !this.state.password1 || !this.state.password2) {
-      this.setState({ errorMsg: 'All fields are required', username: '', displayName: '', newPassword1: '', newPassword2: '' })
+    if(!this.state.username || !this.state.displayName || !this.state.password1 || !this.state.password2)
+      return
+    if(!/^[\w]+$/.test(this.state.displayName)) {
+      this.setState({ displayNameTest: false })
       return
     }
     if(this.state.password1.length < 8) {
-      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', password1: '', password2: '' })
+      this.setState({ passwordLengthTest: false })
       return
     }
     if(this.state.password1 !== this.state.password2) {
-      this.setState({ errorMsg: 'Passwords don\'t match', password1: '', password2: '' })
+      this.setState({ passwordMatchTest: false })
       return
     }
 
@@ -137,13 +146,27 @@ export class AuthContainer extends React.Component {
               </label>
             </span>
             : undefined}
+          {method !== '/register'
+            ? <p className={this.state.username && this.state.password1 ? 'pass-message' : 'error-message'}>
+                All fields are required
+            </p>
+            : undefined}
           {method === '/register'
             ? <div className='account-rules'>
-              <p>Display Name can only contain letters (a-z & A-Z) and numbers (0-9)</p>
-              <p>Passwords must be at least 8 characters long</p>
+              <p className={this.state.username && this.state.displayName && this.state.password1 && this.state.password2 ? 'pass-message' : 'error-message'}>
+                All fields are required
+              </p>
+              <p className={this.state.displayNameTest ? 'pass-message' : 'error-message'}>
+                Display Name can only contain word characters (a-z, A-Z, 0-9, _)
+              </p>
+              <p className={this.state.passwordLengthTest ? 'pass-message' : 'error-message'}>
+                Passwords must be at least 8 characters long
+              </p>
+              <p className={this.state.passwordMatchTest ? 'pass-message' : 'error-message'}>
+                Passwords must be the same
+              </p>
             </div>
             : undefined}
-          {this.state.errorMsg ? <p className='error-message'>Error: {this.state.errorMsg}</p> : undefined}
           <button
             name='auth-button'
             type='submit'
