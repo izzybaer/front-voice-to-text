@@ -56,8 +56,7 @@ export const passwordChangeRequest = (oldPassword, newPassword) => (dispatch, ge
 
 export const userVerifyRequest = () => (dispatch, getState) => {
   let {token} = getState()
-  return superagent.get(`${__API_URL__}/verify`)
-    .set('Authorization', `Bearer ${token}`)
+  return superagent.get(`${__API_URL__}/verify/${token}`)
     .then(res => {
       util.log('userVerifyRequest', res.body)
       return res
