@@ -8,9 +8,22 @@ import * as auth from '../../actions/auth-actions.js'
 export class HeaderContainer extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      username: '',
+    }
 
     this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  componentWillMount() {
+    let username = util.cookieFetch('X-VtT-Username')
+    if(username)
+      this.setState({username})
+    else
+      this.props.userInfo(this.props.username)
+        .then(res => {
+          this.setState({username: res.body.username})
+        })
   }
 
   handleLogout(event) {
@@ -22,6 +35,7 @@ export class HeaderContainer extends React.Component {
     return (
       <header>
         <h1>Voice To Text</h1>
+        <p>Hi {this.state.username}!</p>
         <Link to='/'>Home</Link>
         {this.props.token
           ? <Link to='/changePass'>Change Password</Link>
@@ -40,6 +54,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(auth.logout()),
+  userInfo: token => dispatch(auth.userVerifyRequest(token)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)
