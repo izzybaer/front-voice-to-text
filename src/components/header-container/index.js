@@ -25,6 +25,7 @@ export class HeaderContainer extends React.Component {
 
   handleLogout(event) {
     event.preventDefault()
+    this.setState({username: ''})
     this.props.logout()
   }
 
