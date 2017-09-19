@@ -21,7 +21,7 @@ export class DocumentBrowseContainer extends React.Component {
         console.log(res.body.username)
       })
   }
-
+ 
   // componentWillUpdate() {
   //   this.props.document.length > 1
   //     ? this.props.documentsFetchAll()
