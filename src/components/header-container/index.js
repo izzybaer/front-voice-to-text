@@ -15,7 +15,7 @@ export class HeaderContainer extends React.Component {
     this.handleLogout = this.handleLogout.bind(this)
   }
 
-  componentWillMount() {
+  componentWillUpdate() {
     let username = util.cookieFetch('X-VtT-Username')
     if(username)
       this.setState({username})
@@ -35,7 +35,10 @@ export class HeaderContainer extends React.Component {
     return (
       <header>
         <h1>Voice To Text</h1>
-        <p>Hi {this.state.username}!</p>
+        {this.state.token
+          ? <p>Hi {this.state.username}!</p>
+          : undefined
+        }
         <Link to='/'>Home</Link>
         {this.props.token
           ? <Link to='/changePass'>Change Password</Link>
