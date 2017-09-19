@@ -15,15 +15,12 @@ export class HeaderContainer extends React.Component {
     this.handleLogout = this.handleLogout.bind(this)
   }
 
-  componentWillUpdate() {
-    let username = util.cookieFetch('X-VtT-Username')
-    if(username)
-      this.setState({username})
-    else
-      this.props.userInfo(this.props.username)
-        .then(res => {
-          this.setState({username: res.body.username})
-        })
+  componentWillUpdate(props) {
+    if(!this.state.username) {
+      let username = util.cookieFetch('X-VtT-Username')
+      if(username)
+        this.setState({username})
+    }
   }
 
   handleLogout(event) {
@@ -35,7 +32,7 @@ export class HeaderContainer extends React.Component {
     return (
       <header>
         <h1>Voice To Text</h1>
-        {this.state.token
+        {this.props.token
           ? <p>Hi {this.state.username}!</p>
           : undefined
         }
