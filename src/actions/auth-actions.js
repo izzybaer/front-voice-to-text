@@ -8,6 +8,7 @@ export const tokenSet = token => ({
 
 export const logout = () => {
   util.cookieDelete('X-VtT-Token')
+  util.cookieDelete('X-VtT-Username')
   return { type: 'USER_LOGOUT' }
 }
 
@@ -19,6 +20,7 @@ export const loginRequest = credentials => dispatch =>
       util.log('loginRequest', res.text)
       if(res.text) {
         util.cookieCreate('X-VtT-Token', res.text, 2)
+        util.cookieCreate('X-VtT-Username', credentials.username, 2)
         dispatch(tokenSet(res.text))
       }
       return res
