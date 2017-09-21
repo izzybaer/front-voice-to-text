@@ -54,8 +54,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(auth.logout()),
-  userInfo: token => dispatch(auth.userVerifyRequest(token)),
+  logout: () => dispatch(auth.logoutRequest()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)

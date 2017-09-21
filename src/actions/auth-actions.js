@@ -6,10 +6,21 @@ export const tokenSet = token => ({
   payload: token,
 })
 
-export const logout = () => {
-  util.cookieDelete('X-VtT-Token')
-  util.cookieDelete('X-VtT-Username')
-  return { type: 'USER_LOGOUT' }
+export const logout = () => ({
+  type: 'USER_LOGOUT',
+})
+
+export const logoutRequest = () => (dispatch, getState) => {
+  let {token} = getState()
+  return superagent.get(`${__API_URL__}/logout`)
+    .set('Authorization', `Bearer ${token}`)
+    .then(res => {
+      util.log('logoutRequest', token)
+      util.cookieDelete('X-VtT-Username')
+      dispatch(logout())
+      return res
+    })
+    .catch(err => util.logError('logoutRequest', err))
 }
 
 export const loginRequest = credentials => dispatch =>
@@ -19,8 +30,8 @@ export const loginRequest = credentials => dispatch =>
     .then(res => {
       util.log('loginRequest', res.text)
       if(res.text) {
-        util.cookieCreate('X-VtT-Token', res.text, 2)
-        util.cookieCreate('X-VtT-Username', credentials.username, 2)
+        // util.cookieCreate('X-VtT-Token', res.text, 2)
+        util.cookieCreate('X-VtT-Username', credentials.username, 1)
         dispatch(tokenSet(res.text))
       }
       return res
@@ -34,8 +45,8 @@ export const registerRequest = credentials => dispatch =>
     .then(res => {
       util.log('registerRequest', res.text)
       if(res.text) {
-        util.cookieCreate('X-VtT-Token', res.text, 2)
-        util.cookieCreate('X-VtT-Username', credentials.username, 2)
+        // util.cookieCreate('X-VtT-Token', res.text, 2)
+        util.cookieCreate('X-VtT-Username', credentials.username, 1)
         dispatch(tokenSet(res.text))
       }
       return res
@@ -55,15 +66,4 @@ export const passwordChangeRequest = (oldPassword, newPassword) => (dispatch, ge
       return res
     })
     .catch(err => util.logError('passwordChangeRequest', err))
-}
-
-export const userVerifyRequest = () => (dispatch, getState) => {
-  let {token} = getState()
-  return superagent.post(`${__API_URL__}/verify`)
-    .send({token})
-    .then(res => {
-      util.log('userVerifyRequest', res.body)
-      return res
-    })
-    .catch(err => util.logError('userVerifyRequest', err))
 }
