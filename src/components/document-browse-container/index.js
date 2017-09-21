@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 import * as util from '../../lib/util.js'
-import * as auth from '../../actions/auth-actions.js'
 import * as document from '../../actions/document-actions.js'
 
 export class DocumentBrowseContainer extends React.Component {
@@ -16,17 +15,7 @@ export class DocumentBrowseContainer extends React.Component {
 
   componentWillMount() {
     this.props.documentsFetchAll()
-    this.props.userInfo(this.props.token)
-      .then(res => {
-        console.log(res.body.username)
-      })
   }
- 
-  // componentWillUpdate() {
-  //   this.props.document.length > 1
-  //     ? this.props.documentsFetchAll()
-  //     : undefined
-  // }
 
   handleDelete(id) {
     this.props.documentDelete(id)
@@ -63,7 +52,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   documentsFetchAll: () => dispatch(document.documentFetchAllRequest()),
   documentDelete: id => dispatch(document.documentDeleteRequest(id)),
-  userInfo: token => dispatch(auth.userVerifyRequest(token)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentBrowseContainer)
