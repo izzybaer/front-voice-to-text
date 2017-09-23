@@ -30,7 +30,6 @@ export const loginRequest = credentials => dispatch =>
     .then(res => {
       util.log('loginRequest', res.text)
       if(res.text) {
-        // util.cookieCreate('X-VtT-Token', res.text, 2)
         util.cookieCreate('X-VtT-Username', credentials.username, 1)
         dispatch(tokenSet(res.text))
       }
@@ -45,7 +44,6 @@ export const registerRequest = credentials => dispatch =>
     .then(res => {
       util.log('registerRequest', res.text)
       if(res.text) {
-        // util.cookieCreate('X-VtT-Token', res.text, 2)
         util.cookieCreate('X-VtT-Username', credentials.username, 1)
         dispatch(tokenSet(res.text))
       }
@@ -53,13 +51,14 @@ export const registerRequest = credentials => dispatch =>
     })
     .catch(err => util.logError('registerRequest', err))
 
-export const passwordChangeRequest = (oldPassword, newPassword) => (dispatch, getState) => {
+export const passwordChangeRequest = (oldPassword, newPassword, newPassword2) => (dispatch, getState) => {
   let {token} = getState()
   return superagent.put(`${__API_URL__}/auth`)
     .set('Authorization', `Bearer ${token}`)
     .send({
       oldPassword,
       newPassword,
+      newPassword2,
     })
     .then(res => {
       util.log('passwordChangeRequest', res.text)
