@@ -10,7 +10,7 @@ export class PasswordChange extends React.Component {
     super(props)
     this.state = {
       oldPassword: '',
-      newPassword1: '',
+      newPassword: '',
       newPassword2: '',
       errorMsg: '',
     }
@@ -29,24 +29,28 @@ export class PasswordChange extends React.Component {
   handlePassChange(event) {
     event.preventDefault()
 
-    if(!this.state.oldPassword || !this.state.newPassword1 || !this.state.newPassword2) {
-      this.setState({ errorMsg: 'All fields are required', oldPassword: '', newPassword1: '', newPassword2: '' })
+    if(!this.state.oldPassword || !this.state.newPassword || !this.state.newPassword2) {
+      this.setState({ errorMsg: 'All fields are required', oldPassword: '', newPassword: '', newPassword2: '' })
       return
     }
-    if(this.state.newPassword1.length < 8) {
-      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', oldPassword: '', newPassword1: '', newPassword2: '' })
+    if(this.state.oldPassword === this.state.newPassword || this.state.oldPassword === this.state.newPassword2) {
+      this.setState({ errorMsg: 'Old and new passwords must be different', oldPassword: '', newPassword: '', newPassword2: '' })
       return
     }
-    if(this.state.newPassword1 !== this.state.newPassword2) {
-      this.setState({ errorMsg: 'Passwords don\'t match', oldPassword: '', newPassword1: '', newPassword2: '' })
+    if(this.state.newPassword.length < 8) {
+      this.setState({ errorMsg: 'Passwords must be at least 8 characters long', oldPassword: '', newPassword: '', newPassword2: '' })
+      return
+    }
+    if(this.state.newPassword !== this.state.newPassword2) {
+      this.setState({ errorMsg: 'Passwords don\'t match', oldPassword: '', newPassword: '', newPassword2: '' })
       return
     }
 
-    this.props.passwordChange(this.state.oldPassword, this.state.newPassword1)
+    this.props.passwordChange(this.state.oldPassword, this.state.newPassword, this.state.newPassword2)
       .then(res => {
         util.log('passchange res', res)
       })
-      .catch(err => util.logError('passwordChange errr', err))
+      .catch(err => util.logError('passwordChange err', err))
   }
 
   render() {
@@ -65,11 +69,11 @@ export class PasswordChange extends React.Component {
           required
         />
         <input
-          name='newPassword1'
+          name='newPassword'
           type='password'
           placeholder='New Password'
           onChange={this.handleChange}
-          value={this.state.newPassword1}
+          value={this.state.newPassword}
           required
         />
         <input
@@ -95,7 +99,7 @@ export const mapStateToProps = state => ({
 })
 
 export const mapDispatchToProps = dispatch => ({
-  passwordChange: (oldPassword, newPassword) => dispatch(auth.passwordChangeRequest(oldPassword, newPassword)),
+  passwordChange: (oldPassword, newPassword, newPassword2) => dispatch(auth.passwordChangeRequest(oldPassword, newPassword, newPassword2)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PasswordChange)

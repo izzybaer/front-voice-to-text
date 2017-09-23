@@ -30,7 +30,6 @@ export const loginRequest = credentials => dispatch =>
     .then(res => {
       util.log('loginRequest', res.text)
       if(res.text) {
-        // util.cookieCreate('X-VtT-Token', res.text, 2)
         util.cookieCreate('X-VtT-Username', credentials.username, 1)
         dispatch(tokenSet(res.text))
       }
@@ -45,7 +44,6 @@ export const registerRequest = credentials => dispatch =>
     .then(res => {
       util.log('registerRequest', res.text)
       if(res.text) {
-        // util.cookieCreate('X-VtT-Token', res.text, 2)
         util.cookieCreate('X-VtT-Username', credentials.username, 1)
         dispatch(tokenSet(res.text))
       }
